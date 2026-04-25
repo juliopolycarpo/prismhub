@@ -15,8 +15,33 @@ concurrency:
 
 jobs:
   test:
-    name: Test (unit · integration · e2e · coverage)
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Unit Tests
+            command: bun run test:unit
+            artifact_name: unit-test-results
+            upload_artifacts: true
+          - name: Integration Tests
+            command: bun run test:integration
+            artifact_name: integration-test-results
+            upload_artifacts: true
+          - name: E2E Tests
+            command: bun run test:e2e
+            artifact_name: e2e-test-results
+            upload_artifacts: true
+          - name: Coverage Gate
+            command: bun run test:coverage
+            artifact_name: coverage-results
+            upload_artifacts: false
+          - name: Web Assets Fail-Fast
+            command: bun run check:web-assets-failfast
+            artifact_name: web-assets-failfast-results
+            upload_artifacts: false
 
     steps:
       - uses: actions/checkout@v4
@@ -24,8 +49,13 @@ jobs:
       - name: Setup workspace
         uses: ./.github/actions/setup-bun
 
-      - name: Run test suites
-        run: bun run test
+      - name: Run test command
+        run: ${{ matrix.command }}
 
-      - name: Run coverage gate
-        run: bun run test:coverage
+      - name: Upload test artifacts
+        if: ${{ always() && matrix.upload_artifacts }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: .prismhub/tests
+          if-no-files-found: ignore

@@ -26,6 +26,7 @@
     "test:e2e": "bun scripts/test.ts --e2e",
     "test:coverage": "bun scripts/check-coverage.ts",
     "test:policy": "bun scripts/check-test-policy.ts",
+    "check:web-assets-failfast": "bun scripts/check-web-assets-failfast.ts",
     "boundaries": "bunx turbo boundaries",
     "check": "bun scripts/check.ts",
     "verify": "bun scripts/verify.ts",

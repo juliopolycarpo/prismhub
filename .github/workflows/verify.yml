@@ -16,6 +16,7 @@ jobs:
   verify:
     name: Verify (check · build · boundaries)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -27,22 +28,4 @@ jobs:
         run: bun run verify
 
       - name: Verify web-assets release build fails without dashboard dist
-        working-directory: packages/web-assets
-        run: |
-          rm -rf ../../apps/web/dist src/manifest.generated.ts
-          set +e
-          output="$(bun run build 2>&1)"
-          status=$?
-          set -e
-          printf '%s\n' "$output"
-          if [ "$status" -eq 0 ]; then
-            printf '%s\n' 'web-assets build should fail without apps/web/dist' >&2
-            exit 1
-          fi
-          case "$output" in
-            *DashboardNotBuiltError*) ;;
-            *)
-              printf '%s\n' 'Expected DashboardNotBuiltError when dashboard dist is missing' >&2
-              exit 1
-              ;;
-          esac
+        run: bun run check:web-assets-failfast
