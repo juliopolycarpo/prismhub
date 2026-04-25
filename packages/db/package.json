@@ -1,0 +1,29 @@
+{
+  "name": "@prismhub/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kysely + bun:sqlite dialect, static-registry migrator, and repositories.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:integration": "bun test integration.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@prismhub/config": "workspace:*",
+    "@prismhub/contracts": "workspace:*",
+    "@prismhub/observability": "workspace:*",
+    "kysely": "^0.27.5"
+  },
+  "devDependencies": {
+    "@prismhub/testkit-base": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

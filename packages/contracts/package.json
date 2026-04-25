@@ -1,0 +1,29 @@
+{
+  "name": "@prismhub/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared type definitions and TypeBox schemas across HTTP, CLI, MCP, and dashboard boundaries.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./hooks": "./src/hooks/index.ts",
+    "./feed": "./src/feed/index.ts",
+    "./sessions": "./src/sessions/index.ts",
+    "./mcp": "./src/mcp/index.ts",
+    "./settings": "./src/settings/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test --pass-with-no-tests",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.14"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

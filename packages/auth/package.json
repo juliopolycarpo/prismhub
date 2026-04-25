@@ -1,0 +1,34 @@
+{
+  "name": "@prismhub/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Better Auth wiring for Prismhub: server instance, Elysia plugin, and route guards.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:unit": "bun test unit.test",
+    "test:integration": "bun test integration.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@better-auth/kysely-adapter": "^1.6.9",
+    "@prismhub/config": "workspace:*",
+    "@prismhub/contracts": "workspace:*",
+    "@prismhub/core": "workspace:*",
+    "@prismhub/db": "workspace:*",
+    "@prismhub/observability": "workspace:*",
+    "better-auth": "^1.6.9",
+    "elysia": "^1.2.0"
+  },
+  "devDependencies": {
+    "@prismhub/testkit-base": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

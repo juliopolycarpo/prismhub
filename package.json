@@ -1,0 +1,53 @@
+{
+  "name": "prismhub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first companion app and MCP gateway for coding tools.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "bun@1.3.13",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "start": "bun scripts/start.ts",
+    "build": "bun scripts/build.ts",
+    "lint": "bun scripts/lint.ts",
+    "lint:fix": "bun scripts/lint.ts --fix",
+    "format": "bun scripts/format.ts",
+    "format:write": "bun scripts/format.ts --write",
+    "fix": "bun scripts/fix.ts",
+    "typecheck": "bun scripts/typecheck.ts",
+    "test": "bun scripts/test.ts",
+    "test:unit": "bun scripts/test.ts --unit",
+    "test:integration": "bun scripts/test.ts --integration",
+    "test:e2e": "bun scripts/test.ts --e2e",
+    "test:coverage": "bun scripts/check-coverage.ts",
+    "test:policy": "bun scripts/check-test-policy.ts",
+    "boundaries": "bunx turbo boundaries",
+    "check": "bun scripts/check.ts",
+    "verify": "bun scripts/verify.ts",
+    "migrate": "bun scripts/migrate.ts",
+    "clean": "bun scripts/clean.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/bun": "^1.3.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-unicorn": "^64.0.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.5.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.22.0"
+  },
+  "engines": {
+    "bun": ">=1.3.13"
+  }
+}

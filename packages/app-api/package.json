@@ -1,0 +1,32 @@
+{
+  "name": "@prismhub/app-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Private dashboard API mounted at /api/app, consumed by Eden Treaty.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:integration": "bun test integration.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@prismhub/auth": "workspace:*",
+    "@prismhub/config": "workspace:*",
+    "@prismhub/contracts": "workspace:*",
+    "@prismhub/core": "workspace:*",
+    "@prismhub/db": "workspace:*",
+    "@prismhub/observability": "workspace:*",
+    "elysia": "^1.2.0"
+  },
+  "devDependencies": {
+    "@prismhub/testkit-base": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

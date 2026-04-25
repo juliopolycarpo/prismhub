@@ -1,0 +1,60 @@
+# ─── Dependencies ─── #
+node_modules/
+
+# ─── Build outputs & caches ─── #
+.turbo/
+dist/
+build/
+*.tsbuildinfo
+.vite/
+
+# ─── Coverage & test artifacts ─── #
+coverage/
+out/
+.prismhub/*
+
+# ─── Logs ─── #
+*.log
+npm-debug.log*
+bun-debug.log*
+
+# ─── Environment & secrets ─── #
+.env
+.env.*
+!.prismhub/.env.example
+!.prismhub/.tool-versions
+
+# ─── AI / tooling state ( Never committed - Every user must has their own ) ─── #
+.claude/
+.agents/
+.agent/
+.remember/
+.gemini/
+.codex/
+.codex
+.geminiignore
+.aiexclude
+.ignore
+
+# ─── Databases (primary location is .prismhub/) ─── #
+*.sqlite
+*.sqlite3
+*.db
+
+# ─── Lint caches ─── #
+.eslintcache
+
+# ─── OS Files ─── #
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ─── Pack archives (never commit tarballs — use the registry) ─── #
+*.tgz
+*.tar.gz
+*.zip
+
+# ─── Source maps (only needed at runtime; rebuild from source) ─── #
+*.map

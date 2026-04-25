@@ -1,0 +1,34 @@
+{
+  "name": "@prismhub/testkit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "High-level test helpers: services bootstrap, Elysia test server, event bus recorder.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:unit": "bun test unit.test",
+    "test:integration": "bun test integration.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@prismhub/app-api": "workspace:*",
+    "@prismhub/auth": "workspace:*",
+    "@prismhub/config": "workspace:*",
+    "@prismhub/contracts": "workspace:*",
+    "@prismhub/core": "workspace:*",
+    "@prismhub/db": "workspace:*",
+    "@prismhub/http-server": "workspace:*",
+    "@prismhub/testkit-base": "workspace:*",
+    "elysia": "^1.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

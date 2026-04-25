@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.library.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../contracts" },
+    { "path": "../observability" },
+    { "path": "../core" },
+    { "path": "../mcp-host" }
+  ]
+}

@@ -1,0 +1,48 @@
+# ─── Default: normalize all text files to LF on checkout ─────────────────────
+* text=auto eol=lf
+
+# ─── Text — explicit normalization ───────────────────────────────────────────
+*.ts       text eol=lf diff=typescript
+*.tsx      text eol=lf diff=typescript
+*.js       text eol=lf diff=javascript
+*.jsx      text eol=lf diff=javascript
+*.mjs      text eol=lf diff=javascript
+*.cjs      text eol=lf diff=javascript
+*.json     text eol=lf
+*.md       text eol=lf diff=markdown
+*.css      text eol=lf diff=css
+*.html     text eol=lf diff=html
+*.yml      text eol=lf
+*.yaml     text eol=lf
+*.toml     text eol=lf
+*.sh       text eol=lf
+*.svg      text eol=lf
+*.graphql   text eol=lf
+*.gql      text eol=lf
+
+# ─── Binary — prevent corruption ─────────────────────────────────────────────
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.webp     binary
+*.avif     binary
+*.woff     binary
+*.woff2    binary
+*.ttf      binary
+*.otf      binary
+*.eot      binary
+*.wasm     binary
+*.pdf      binary
+*.zip      binary
+*.tar.gz   binary
+*.tgz      binary
+*.sqlite   binary
+*.sqlite3  binary
+*.db       binary
+
+# ─── Generated files — exclude from diffs and language stats ─────────────────
+bun.lock                linguist-generated=true diff=lockfile
+**/*.generated.ts       linguist-generated=true
+**/*.generated.*.ts     linguist-generated=true

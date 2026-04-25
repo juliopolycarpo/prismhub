@@ -1,0 +1,30 @@
+{
+  "name": "@prismhub/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Domain services, use-cases, and the in-process event bus. No HTTP, MCP SDK, or UI imports.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:unit": "bun test unit.test",
+    "test:integration": "bun test integration.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@prismhub/config": "workspace:*",
+    "@prismhub/contracts": "workspace:*",
+    "@prismhub/db": "workspace:*",
+    "@prismhub/observability": "workspace:*"
+  },
+  "devDependencies": {
+    "@prismhub/testkit-base": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

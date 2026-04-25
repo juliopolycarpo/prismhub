@@ -1,0 +1,25 @@
+{
+  "name": "@prismhub/testkit-base",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Zero-dependency test helpers: temp directories, temp database file paths, frozen clock.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./fs": "./src/fs.ts",
+    "./db": "./src/db.ts",
+    "./clock": "./src/clock.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:unit": "bun test unit.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

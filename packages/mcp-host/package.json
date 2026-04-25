@@ -1,0 +1,29 @@
+{
+  "name": "@prismhub/mcp-host",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prismhub MCP server and transports — merges mcp-server + mcp-transports.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:unit": "bun test unit.test",
+    "test:integration": "bun test integration.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@prismhub/mcp-core": "workspace:*",
+    "@prismhub/observability": "workspace:*",
+    "elysia": "^1.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

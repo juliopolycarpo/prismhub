@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.library.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../contracts" },
+    { "path": "../config" },
+    { "path": "../observability" },
+    { "path": "../db" },
+    { "path": "../testkit-base" }
+  ]
+}

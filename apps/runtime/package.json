@@ -1,0 +1,42 @@
+{
+  "name": "@prismhub/runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prismhub runtime — composition root, CLI, single-binary target.",
+  "bin": {
+    "prismhub": "./src/main.ts"
+  },
+  "scripts": {
+    "dev": "bun --hot ./src/main.ts serve",
+    "start": "bun ./src/main.ts serve",
+    "build": "bun build ./src/main.ts --target=bun --outdir ./dist",
+    "compile": "bun build ./src/main.ts --compile --target=bun --minify --sourcemap=none --outfile ./dist/prismhub",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "test": "bun test",
+    "test:integration": "bun test integration.test",
+    "test:e2e": "bun test e2e.test",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@prismhub/app-api": "workspace:*",
+    "@prismhub/auth": "workspace:*",
+    "@prismhub/config": "workspace:*",
+    "@prismhub/contracts": "workspace:*",
+    "@prismhub/core": "workspace:*",
+    "@prismhub/db": "workspace:*",
+    "@prismhub/http-server": "workspace:*",
+    "@prismhub/mcp-client": "workspace:*",
+    "@prismhub/mcp-core": "workspace:*",
+    "@prismhub/mcp-host": "workspace:*",
+    "@prismhub/observability": "workspace:*",
+    "@prismhub/web-assets": "workspace:*"
+  },
+  "devDependencies": {
+    "@prismhub/testkit-base": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

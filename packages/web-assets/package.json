@@ -1,0 +1,29 @@
+{
+  "name": "@prismhub/web-assets",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Typed manifest of apps/web dashboard assets, embeddable inside the compiled binary.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit && tsc --noEmit -p scripts/tsconfig.json",
+    "lint": "eslint src scripts --max-warnings=0",
+    "lint:fix": "eslint src scripts --fix",
+    "test": "bun test",
+    "test:unit": "bun test unit.test",
+    "test:integration": "bun test integration.test",
+    "build": "bun ./scripts/generate.ts --mode=release && tsc --build",
+    "generate": "bun ./scripts/generate.ts --mode=dev",
+    "generate:release": "bun ./scripts/generate.ts --mode=release",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo src/manifest.generated.ts scripts/*.d.ts scripts/*.d.ts.map scripts/*.tsbuildinfo"
+  },
+  "dependencies": {
+    "@prismhub/observability": "workspace:*"
+  },
+  "devDependencies": {
+    "@prismhub/web": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

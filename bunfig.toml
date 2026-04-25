@@ -1,0 +1,14 @@
+# linker = "hoisted" — traditional npm-style hoisting.
+# Decision: keeping hoisted because @modelcontextprotocol/sdk ships CJS
+# internals that rely on hoisting for peer dependency resolution. Switch to
+# "isolated" only after verifying that all workspace consumers declare their
+# own copies of transitive dependencies.
+[install]
+linker = "hoisted"
+
+[install.lockfile]
+save = true
+
+[test]
+# coverage = false is the Bun default. Removed because explicitly setting it
+# blocks the --coverage CLI flag from working (bunfig wins over CLI in Bun 1.x).
