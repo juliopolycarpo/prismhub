@@ -15,9 +15,6 @@ concurrency:
 
 jobs:
   test:
-    name: ${{ matrix.name }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -42,20 +39,10 @@ jobs:
             command: bun run check:web-assets-failfast
             artifact_name: web-assets-failfast-results
             upload_artifacts: false
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup workspace
-        uses: ./.github/actions/setup-bun
-
-      - name: Run test command
-        run: ${{ matrix.command }}
-
-      - name: Upload test artifacts
-        if: ${{ always() && matrix.upload_artifacts }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: .prismhub/tests
-          if-no-files-found: ignore
+    uses: ./.github/workflows/run-command.yml
+    with:
+      jobName: ${{ matrix.name }}
+      timeoutMinutes: 30
+      command: ${{ matrix.command }}
+      uploadArtifacts: ${{ matrix.upload_artifacts }}
+      artifactName: ${{ matrix.artifact_name }}

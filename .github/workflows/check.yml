@@ -15,22 +15,13 @@ concurrency:
 
 jobs:
   check:
-    name: Check (typecheck · lint · format · policy · boundaries)
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup workspace
-        uses: ./.github/actions/setup-bun
-
-      - name: Run quality gates
-        run: |
-          bun run typecheck
-          bun run lint
-          bun run format
-          bun run test:policy
-
-      - name: Check workspace boundaries
-        run: bun run boundaries
+    uses: ./.github/workflows/run-command.yml
+    with:
+      jobName: Check (typecheck · lint · format · policy · boundaries)
+      timeoutMinutes: 20
+      command: |
+        bun run typecheck
+        bun run lint
+        bun run format
+        bun run test:policy
+        bun run boundaries

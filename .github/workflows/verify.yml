@@ -14,18 +14,10 @@ concurrency:
 
 jobs:
   verify:
-    name: Verify (check · build · boundaries)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup workspace
-        uses: ./.github/actions/setup-bun
-
-      - name: Run final handoff gate
-        run: bun run verify
-
-      - name: Verify web-assets release build fails without dashboard dist
-        run: bun run check:web-assets-failfast
+    uses: ./.github/workflows/run-command.yml
+    with:
+      jobName: Verify (check · build · boundaries · web-assets fail-fast)
+      timeoutMinutes: 30
+      command: |
+        bun run verify
+        bun run check:web-assets-failfast

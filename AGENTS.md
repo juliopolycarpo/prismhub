@@ -20,6 +20,7 @@
 - CI runs `Check` and `Test` workflows in parallel on `push` and `pull_request`.
 - `Test` fans out unit, integration, e2e, coverage, and `web-assets` fail-fast jobs in parallel and uploads `.prismhub/tests/**/results/` artifacts.
 - Pull requests also run `Verify`, which executes `bun run verify` plus the reusable `packages/web-assets` fail-fast release-build check.
+- Shared CI job wiring lives in `.github/workflows/run-command.yml`.
 - Shared CI bootstrap lives in `.github/actions/setup-bun/action.yml`.
 - `bun run verify` is the final handoff gate: `check -> build -> boundaries`.
 - `bun run check` runs 8 gates in parallel: typecheck, lint, format, unit, integration, e2e, coverage, policy.
