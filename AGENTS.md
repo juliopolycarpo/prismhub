@@ -19,6 +19,7 @@
 
 - CI runs `Check` and `Test` workflows in parallel on `push` and `pull_request`.
 - Pull requests also run `Verify`, which executes `bun run verify` plus the `packages/web-assets` fail-fast release-build check.
+- Shared CI bootstrap lives in `.github/actions/setup-bun/action.yml`.
 - `bun run verify` is the final handoff gate: `check -> build -> boundaries`.
 - `bun run check` runs 8 gates in parallel: typecheck, lint, format, unit, integration, e2e, coverage, policy.
 - `bun run typecheck` also checks root `scripts/` with `tsc --noEmit -p scripts/tsconfig.json`; Turbo does not cover those files by itself.
