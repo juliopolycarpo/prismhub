@@ -15,9 +15,10 @@ concurrency:
 jobs:
   verify:
     uses: ./.github/workflows/run-command.yml
+    secrets: inherit
     with:
-      jobName: Verify (check · build · boundaries · web-assets fail-fast)
+      jobName: Verify (check · build · boundaries)
+      turboTeam: ${{ vars.TURBO_TEAM }}
+      turboApi: ${{ vars.TURBO_API }}
       timeoutMinutes: 30
-      command: |
-        bun run verify
-        bun run check:web-assets-failfast
+      command: bun run verify

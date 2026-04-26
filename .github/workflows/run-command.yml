@@ -11,6 +11,16 @@ on:
         description: Bun command or shell script to run from the repository root.
         required: true
         type: string
+      turboTeam:
+        description: Optional Turborepo team slug for remote caching.
+        required: false
+        default: ''
+        type: string
+      turboApi:
+        description: Optional Turborepo remote cache API URL for self-hosted cache.
+        required: false
+        default: ''
+        type: string
       timeoutMinutes:
         description: Job timeout in minutes.
         required: false
@@ -26,6 +36,10 @@ on:
         required: false
         default: test-results
         type: string
+    secrets:
+      TURBO_TOKEN:
+        description: Optional Turborepo token for remote caching in CI.
+        required: false
 
 permissions:
   contents: read
@@ -44,6 +58,10 @@ jobs:
 
       - name: Run command
         shell: bash
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ inputs.turboTeam }}
+          TURBO_API: ${{ inputs.turboApi }}
         run: ${{ inputs.command }}
 
       - name: Upload test artifacts

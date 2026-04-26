@@ -16,8 +16,11 @@ concurrency:
 jobs:
   check:
     uses: ./.github/workflows/run-command.yml
+    secrets: inherit
     with:
       jobName: Check (typecheck · lint · format · policy · boundaries)
+      turboTeam: ${{ vars.TURBO_TEAM }}
+      turboApi: ${{ vars.TURBO_API }}
       timeoutMinutes: 20
       command: |
         bun run typecheck
