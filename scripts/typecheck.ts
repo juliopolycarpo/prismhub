@@ -1,11 +1,12 @@
 #!/usr/bin/env bun
-import { bunxCommand, inheritSpawn, runTurboTask } from './_lib/spawn';
+import { inheritSpawn, runTurboTask } from './_lib/spawn';
+import { rootScriptsTypecheckCommand } from './_lib/typecheck-command';
 
 async function main(): Promise<number> {
   const passthrough = process.argv.slice(2);
   const [turbo, scripts] = await Promise.all([
     runTurboTask('typecheck', passthrough),
-    inheritSpawn(bunxCommand('tsc', ['-b', 'scripts/tsconfig.json'])),
+    inheritSpawn(rootScriptsTypecheckCommand()),
   ]);
   return turbo === 0 && scripts === 0 ? 0 : turbo || scripts;
 }

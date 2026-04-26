@@ -13,6 +13,7 @@ import { parseBunTestCounts } from './parsers/bunTest';
 import { parseTscOutput } from './parsers/tsc';
 import { parsePrettierCheck } from './parsers/prettier';
 import { listRootScriptUnitTests } from './test-files';
+import { rootScriptsTypecheckCommand } from './typecheck-command';
 
 const BUN = process.execPath;
 // Resolve the turbo binary directly to skip the `bun x` resolver cold start.
@@ -69,7 +70,7 @@ export const typecheckGate: Gate = {
     const opts = baseSpawnOpts(ctx);
     const [turbo, scripts] = await Promise.all([
       spawnCaptured(turboRun('typecheck', ['--output-logs=errors-only']), opts),
-      spawnCaptured([BUN, 'x', 'tsc', '-b', 'scripts/tsconfig.json'], opts),
+      spawnCaptured(rootScriptsTypecheckCommand(), opts),
     ]);
 
     const output = `${joinOutput(turbo)}\n${joinOutput(scripts)}`;

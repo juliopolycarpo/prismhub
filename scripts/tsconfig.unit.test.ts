@@ -1,38 +1,39 @@
 import { describe, expect, test } from 'bun:test';
+import { ROOT_SCRIPTS_TSCONFIG, rootScriptsTypecheckCommand } from './_lib/typecheck-command';
 
-async function runScriptsTypecheck(): Promise<{
-  exitCode: number;
-  output: string;
-}> {
-  const scriptProcess = Bun.spawn(
-    ['bun', 'x', 'tsc', '--noEmit', '--project', 'scripts/tsconfig.json', '--pretty', 'false'],
-    {
-      cwd: import.meta.dir + '/..',
-      stdout: 'pipe',
-      stderr: 'pipe',
-    },
-  );
-
-  const [stdout, stderr, exitCode] = await Promise.all([
-    new Response(scriptProcess.stdout).text(),
-    new Response(scriptProcess.stderr).text(),
-    scriptProcess.exited,
-  ]);
-
-  return {
-    exitCode,
-    output: `${stdout}\n${stderr}`,
+interface TsConfigJson {
+  readonly extends?: string;
+  readonly include?: readonly string[];
+  readonly compilerOptions?: {
+    readonly moduleResolution?: string;
+    readonly types?: readonly string[];
   };
 }
 
-describe('root scripts tsconfig', () => {
-  test('typechecks Bun scripts without missing global or import-meta errors', async () => {
-    const { exitCode, output } = await runScriptsTypecheck();
+async function readTsConfig(path: string): Promise<TsConfigJson> {
+  return (await Bun.file(`${import.meta.dir}/../${path}`).json()) as TsConfigJson;
+}
 
-    expect(exitCode).toBe(0);
-    expect(output).not.toContain('Cannot find name');
-    expect(output).not.toContain("Property 'dir' does not exist on type 'ImportMeta'");
-    expect(output).not.toContain("Property 'main' does not exist on type 'ImportMeta'");
-    expect(output).not.toContain("Cannot find module 'bun:test'");
-  }, 15000);
+describe('root scripts tsconfig', () => {
+  test('is covered by the root typecheck command', () => {
+    expect(rootScriptsTypecheckCommand()).toEqual([
+      process.execPath,
+      'x',
+      'tsc',
+      '-b',
+      ROOT_SCRIPTS_TSCONFIG,
+    ]);
+  });
+
+  test('inherits Bun globals and import-meta support', async () => {
+    const scriptsConfig = await readTsConfig(ROOT_SCRIPTS_TSCONFIG);
+    const scriptBaseConfig = await readTsConfig('tsconfig.script.json');
+    const baseConfig = await readTsConfig('tsconfig.base.json');
+
+    expect(scriptsConfig.extends).toBe('../tsconfig.script.json');
+    expect(scriptsConfig.include).toEqual(['./**/*']);
+    expect(scriptBaseConfig.extends).toBe('./tsconfig.base.json');
+    expect(baseConfig.compilerOptions?.moduleResolution).toBe('Bundler');
+    expect(baseConfig.compilerOptions?.types).toContain('bun');
+  });
 });
