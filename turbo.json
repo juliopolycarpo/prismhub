@@ -4,17 +4,26 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "src/manifest.generated.ts"]
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig*.json", "src/**/*.ts", "src/**/*.tsx"],
+      "outputs": ["dist/**", "src/manifest.generated.ts", "*.tsbuildinfo"]
     },
     "compile": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig*.json", "src/**/*.ts", "src/**/*.tsx"],
+      "outputs": ["dist/**", "*.tsbuildinfo"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "lint": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../eslint.config.js",
+        "../../eslint.rules.js",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
       "outputs": []
     },
     "lint:fix": {
@@ -23,26 +32,73 @@
     },
     "typecheck": {
       "dependsOn": ["^build", "^typecheck"],
-      "outputs": []
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "../../tsconfig*.json",
+        "tsconfig*.json",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
+      "outputs": ["*.tsbuildinfo", "**/*.tsbuildinfo"]
     },
     "test": {
       "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test-setup.ts",
+        "vitest.config.ts",
+        "bunfig.toml"
+      ],
       "outputs": []
     },
     "test:unit": {
       "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test-setup.ts",
+        "vitest.config.ts",
+        "bunfig.toml"
+      ],
       "outputs": []
     },
     "test:integration": {
       "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test-setup.ts",
+        "vitest.config.ts",
+        "bunfig.toml"
+      ],
       "outputs": []
     },
     "test:e2e": {
       "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test-setup.ts",
+        "vitest.config.ts",
+        "bunfig.toml"
+      ],
       "outputs": []
     },
     "test:coverage": {
       "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "test-setup.ts",
+        "vitest.config.ts",
+        "bunfig.toml"
+      ],
       "outputs": ["coverage/**"]
     },
     "migrate": {

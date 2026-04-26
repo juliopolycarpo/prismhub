@@ -1,5 +1,11 @@
 import { describe, expect, test } from 'bun:test';
-import { renderChecklist, renderFailures, renderFooter, renderFullOutput } from './format';
+import {
+  renderChecklist,
+  renderFailures,
+  renderFooter,
+  renderFullOutput,
+  renderGitHubGroup,
+} from './format';
 
 describe('renderChecklist()', () => {
   test('marks passed and failed', () => {
@@ -84,4 +90,16 @@ describe('renderFooter()', () => {
       for (const str of expectedNotContains) expect(text).not.toContain(str);
     },
   );
+});
+describe('renderGitHubGroup()', () => {
+  test('wraps body when enabled', () => {
+    const out = renderGitHubGroup('typecheck', 'tsc ok\n', true);
+    expect(out).toBe('::group::typecheck\ntsc ok\n::endgroup::');
+  });
+
+  test('returns plain trimmed body when disabled', () => {
+    const out = renderGitHubGroup('typecheck', 'tsc ok\n\n\n', false);
+    expect(out).toBe('tsc ok');
+    expect(out).not.toContain('::group::');
+  });
 });

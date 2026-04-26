@@ -11,35 +11,9 @@
  */
 import { $ } from 'bun';
 
-export const GLOBAL_THRESHOLD = 70;
+import { GLOBAL_THRESHOLD, LAYER_THRESHOLDS, type LayerConfig } from './_lib/coverage-config';
 
-export interface LayerConfig {
-  readonly dir: string;
-  readonly threshold: number;
-}
-
-/** Per-layer thresholds. Tighter for stable, pure-logic layers. */
-export const LAYER_THRESHOLDS: readonly LayerConfig[] = [
-  // Core domain logic — highest bar
-  { dir: 'packages/core', threshold: 90 },
-  { dir: 'packages/db', threshold: 90 },
-  // Infrastructure / API layer
-  { dir: 'packages/http-server', threshold: 70 },
-  { dir: 'packages/app-api', threshold: 65 },
-  { dir: 'packages/mcp-client', threshold: 65 },
-  { dir: 'packages/mcp-core', threshold: 80 },
-  { dir: 'packages/mcp-host', threshold: 85 },
-  { dir: 'packages/observability', threshold: 80 },
-  { dir: 'packages/config', threshold: 80 },
-  // Application layer
-  { dir: 'apps/runtime', threshold: 70 },
-  { dir: 'apps/web', threshold: 70 },
-  // Static asset bundler — small, pure-logic
-  { dir: 'packages/web-assets', threshold: 70 },
-  // Test infrastructure (behavioral)
-  { dir: 'packages/testkit-base', threshold: 80 },
-  { dir: 'packages/testkit', threshold: 60 },
-];
+export { GLOBAL_THRESHOLD, LAYER_THRESHOLDS, type LayerConfig };
 
 /**
  * Result of a single coverage subprocess invocation. Carries enough context
@@ -114,9 +88,14 @@ if (import.meta.main) {
   // Includes packages/, apps/runtime/, and root scripts/ (excludes apps/web,
   // which needs its own DOM preload and is measured per-layer).
   const globalRun =
-    await $`bun test --coverage --coverage-reporter=text packages apps/runtime scripts 2>&1`.nothrow();
-  const globalOutput = globalRun.stdout.toString() + globalRun.stderr.toString();
-  process.stdout.write(globalOutput);
+    await $`bun test --coverage --coverage-reporter=text packages apps/runtime scripts`
+      .quiet()
+      .nothrow();
+  const globalStdout = globalRun.stdout.toString();
+  const globalStderr = globalRun.stderr.toString();
+  const globalOutput = `${globalStdout}${globalStderr}`;
+  process.stdout.write(globalStdout);
+  if (globalStderr) process.stderr.write(globalStderr);
 
   const globalResult: CoverageRunResult = {
     label: 'global',
@@ -140,10 +119,11 @@ if (import.meta.main) {
   const layerResults = await Promise.all(
     LAYER_THRESHOLDS.map(
       async (layer): Promise<{ layer: LayerConfig; result: CoverageRunResult }> => {
-        const run = await $`bun test --coverage --coverage-reporter=text 2>&1`
+        const run = await $`bun test --coverage --coverage-reporter=text`
           .cwd(layer.dir)
+          .quiet()
           .nothrow();
-        const output = run.stdout.toString() + run.stderr.toString();
+        const output = `${run.stdout.toString()}${run.stderr.toString()}`;
         const coverage = parsePackageSrcCoverage(output) ?? parseCoverageOutput(output);
         return {
           layer,

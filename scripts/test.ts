@@ -30,6 +30,12 @@ interface SuiteRecord {
   readonly durationMs: number;
   readonly logPath: string;
   readonly command: readonly string[];
+  /**
+   * True when the underlying turbo task short-circuited via cache or had no
+   * tests to run. Surfaced in `summary.json` so successful zero-test runs
+   * are visible instead of looking identical to a real pass.
+   */
+  readonly cached: boolean;
 }
 
 function resolveMode(flags: ReadonlySet<string>): Mode {
@@ -73,6 +79,7 @@ async function runWorkspaceSuite(
     durationMs: result.durationMs,
     logPath,
     command,
+    cached: await detectCachedRun(logPath),
   });
   return result.exitCode;
 }
@@ -89,8 +96,23 @@ async function runRootScriptsSuite(ctx: RunContext): Promise<number> {
     durationMs: result.durationMs,
     logPath,
     command,
+    cached: false,
   });
   return result.exitCode;
+}
+
+/**
+ * Heuristic: turbo prints lines like "cache hit, replaying logs" or
+ * "cache hit, suppressing logs" when a task short-circuits. Reads the
+ * captured log once after the run; missing or unreadable logs return false.
+ */
+async function detectCachedRun(logPath: string): Promise<boolean> {
+  try {
+    const text = await Bun.file(logPath).text();
+    return /cache hit/i.test(text);
+  } catch {
+    return false;
+  }
 }
 
 async function runUnit(ctx: RunContext): Promise<number> {

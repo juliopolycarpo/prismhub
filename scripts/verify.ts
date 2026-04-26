@@ -3,8 +3,9 @@
  * `bun verify` — final handoff gate. Runs sequentially, fails fast.
  *
  * Order:
- *   1. `bun run check`       — fast gates (or `bun run check --full` in CI for richer logs)
- *   2. `bun run build`       — full workspace build
+ *   1. `bun run build`       — full workspace build (warms turbo cache)
+ *   2. `bun run check`       — fast gates; resume mode keeps CI output tight
+ *                              (only failed gates dump captured output)
  *   3. `bun run boundaries`  — turbo boundaries (no cycles, no missing deps)
  *
  * Stops at the first non-zero exit and propagates that exit code.
@@ -18,20 +19,10 @@ export interface VerifyCommand {
   readonly argv: readonly string[];
 }
 
-export function shouldUseFullCheckOutput(
-  env: Readonly<Record<string, string | undefined>> = process.env,
-): boolean {
-  return env.CI === 'true' || env.CI === '1';
-}
-
-const VERIFY_TAIL: readonly VerifyCommand[] = [
-  { name: 'build', argv: ['bun', 'run', 'build'] },
-  { name: 'boundaries', argv: ['bun', 'run', 'boundaries'] },
-];
-
 export const VERIFY_PLAN: readonly VerifyCommand[] = [
+  { name: 'build', argv: ['bun', 'run', 'build'] },
   { name: 'check', argv: ['bun', 'run', 'check'] },
-  ...VERIFY_TAIL,
+  { name: 'boundaries', argv: ['bun', 'run', 'boundaries'] },
 ];
 
 export interface CommandRunResult {
@@ -43,14 +34,8 @@ export interface CommandRunResult {
  * Pure plan helper: returns the command sequence verify should run, in order.
  * Useful for tests so we don't shell out.
  */
-export function getVerifyPlan(
-  env: Readonly<Record<string, string | undefined>> = process.env,
-): readonly VerifyCommand[] {
-  const checkArgv = shouldUseFullCheckOutput(env)
-    ? ['bun', 'run', 'check', '--full']
-    : ['bun', 'run', 'check'];
-
-  return [{ name: 'check', argv: checkArgv }, ...VERIFY_TAIL];
+export function getVerifyPlan(): readonly VerifyCommand[] {
+  return VERIFY_PLAN;
 }
 
 /**

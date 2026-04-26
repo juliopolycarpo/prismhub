@@ -3,9 +3,11 @@ import { bunxCommand, inheritSpawn, runTurboTask } from './_lib/spawn';
 
 async function main(): Promise<number> {
   const passthrough = process.argv.slice(2);
-  const turbo = await runTurboTask('typecheck', passthrough);
-  if (turbo !== 0) return turbo;
-  return inheritSpawn(bunxCommand('tsc', ['--noEmit', '-p', 'scripts/tsconfig.json']));
+  const [turbo, scripts] = await Promise.all([
+    runTurboTask('typecheck', passthrough),
+    inheritSpawn(bunxCommand('tsc', ['-b', 'scripts/tsconfig.json'])),
+  ]);
+  return turbo === 0 && scripts === 0 ? 0 : turbo || scripts;
 }
 
 if (import.meta.main) {

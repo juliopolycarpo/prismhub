@@ -2,7 +2,8 @@ name: Check
 
 on:
   push:
-    branches: ['**']
+    branches-ignore: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,9 +18,10 @@ jobs:
     secrets: inherit
     with:
       jobName: Check (typecheck · lint · format · policy · boundaries)
-      enableRemoteCache: true
-      turboTeam: ${{ vars.TURBO_TEAM }}
-      turboApi: ${{ vars.TURBO_API }}
+      # Remote cache (Vercel) is intentionally OFF here — the GitHub Actions
+      # cache configured in setup-bun (.turbo, *.tsbuildinfo, node_modules/.cache)
+      # is enough for these fast gates and avoids 429 ratelimits.
+      enableRemoteCache: false
       timeoutMinutes: 20
       command: |
         bun run typecheck

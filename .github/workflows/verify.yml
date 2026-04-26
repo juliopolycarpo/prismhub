@@ -17,9 +17,11 @@ jobs:
     uses: ./.github/workflows/run-command.yml
     secrets: inherit
     with:
-      jobName: Verify (check · build · boundaries)
-      enableRemoteCache: true
-      turboTeam: ${{ vars.TURBO_TEAM }}
-      turboApi: ${{ vars.TURBO_API }}
+      jobName: Verify (build · check · boundaries)
+      # Remote cache (Vercel) reserved for heavy test jobs in test.yml.
+      # GitHub Actions cache (setup-bun) covers .turbo + tsbuildinfo here.
+      enableRemoteCache: false
       timeoutMinutes: 30
-      command: bun run verify
+      command: |
+        bun run check:web-assets-failfast
+        bun run verify

@@ -67,7 +67,15 @@ jobs:
           TURBO_TOKEN: ${{ inputs.enableRemoteCache && secrets.TURBO_TOKEN || '' }}
           TURBO_TEAM: ${{ inputs.enableRemoteCache && inputs.turboTeam || '' }}
           TURBO_API: ${{ inputs.enableRemoteCache && inputs.turboApi || '' }}
-        run: ${{ inputs.command }}
+        run: |
+          set -o pipefail
+          echo "::group::${{ inputs.jobName }}"
+          set +e
+          ${{ inputs.command }}
+          status=$?
+          set -e
+          echo "::endgroup::"
+          exit $status
 
       - name: Upload test artifacts
         if: ${{ always() && inputs.uploadArtifacts }}
