@@ -17,7 +17,7 @@
 
 ## Verification
 
-- CI runs `Check` and `Test` workflows in parallel on `push` and `pull_request`.
+- CI runs `Check` on `push`, `Test` on `push` and `pull_request`, and `Verify` on `pull_request`.
 - `Test` fans out unit, integration, e2e, coverage, and `web-assets` fail-fast jobs in parallel and uploads `.prismhub/tests/**/results/` artifacts.
 - Pull requests also run `Verify`, which executes `bun run verify` as the final handoff gate.
 - Shared CI job wiring lives in `.github/workflows/run-command.yml`.
