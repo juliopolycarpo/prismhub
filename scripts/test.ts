@@ -15,11 +15,9 @@ import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parseArgv } from './_lib/argv';
 import { getRunId } from './_lib/run-id';
-import { inheritSpawn } from './_lib/spawn';
+import { inheritSpawn, turboRunCommand } from './_lib/spawn';
 import { teeSpawn, REPO_ROOT } from './_lib/tee-spawn';
 import { listRootScriptUnitTests } from './_lib/test-files';
-
-const BUN = process.execPath;
 
 type Mode = 'all' | 'unit' | 'integration' | 'e2e';
 type Suite = 'unit' | 'integration' | 'e2e' | 'scripts-unit';
@@ -56,14 +54,11 @@ export function turboRunTestCommand(
   task: TurboTestTask,
   turboConcurrency: string | undefined,
 ): readonly string[] {
-  return [
-    BUN,
-    'x',
-    'turbo',
-    'run',
+  return turboRunCommand(
     task,
-    ...(turboConcurrency ? [`--concurrency=${turboConcurrency}`] : []),
-  ];
+    [],
+    turboConcurrency ? [`--concurrency=${turboConcurrency}`] : [],
+  );
 }
 
 interface RunContext {
@@ -109,7 +104,7 @@ async function runWorkspaceSuite(
 async function runRootScriptsSuite(ctx: RunContext): Promise<number> {
   const files = await listRootScriptUnitTests();
   if (files.length === 0) return 0;
-  const command = [BUN, 'test', ...files];
+  const command = [process.execPath, 'test', ...files];
   const logPath = resolve(ctx.resultsDir, 'scripts-unit.log.txt');
   const result = await teeSpawn(command, logPath, ctx.env);
   ctx.suites.push({
@@ -181,7 +176,7 @@ async function runLegacy(mode: Mode, turboConcurrency: string | undefined): Prom
       if (workspace !== 0) return workspace;
       const files = await listRootScriptUnitTests();
       if (files.length === 0) return 0;
-      return inheritSpawn([BUN, 'test', ...files]);
+      return inheritSpawn([process.execPath, 'test', ...files]);
     }
     return inheritSpawn(turboRunTestCommand(turboTaskFor(mode), turboConcurrency));
   }
@@ -190,7 +185,7 @@ async function runLegacy(mode: Mode, turboConcurrency: string | undefined): Prom
   if (unit !== 0) return unit;
   const files = await listRootScriptUnitTests();
   if (files.length > 0) {
-    const scripts = await inheritSpawn([BUN, 'test', ...files]);
+    const scripts = await inheritSpawn([process.execPath, 'test', ...files]);
     if (scripts !== 0) return scripts;
   }
   const integration = await inheritSpawn(turboRunTestCommand('test:integration', turboConcurrency));

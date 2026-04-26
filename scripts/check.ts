@@ -52,6 +52,28 @@ function isGitHubActions(): boolean {
   return process.env.GITHUB_ACTIONS === 'true';
 }
 
+interface GateOutputEntry {
+  readonly name: string;
+  readonly output: string;
+  readonly annotation: string;
+}
+
+function renderOutputSection(
+  entries: readonly GateOutputEntry[],
+  groupsEnabled: boolean,
+  fallback: () => string,
+): void {
+  if (groupsEnabled) {
+    for (const e of entries) {
+      process.stdout.write(
+        `${renderGitHubGroup(`${e.name} (${e.annotation})`, e.output, true)}\n`,
+      );
+    }
+  } else {
+    process.stdout.write(fallback());
+  }
+}
+
 function printReport(results: readonly GateResult[], mode: CheckMode, elapsedMs: number): void {
   const groupsEnabled = isGitHubActions();
   const rows = results.map((r) => ({
@@ -62,27 +84,22 @@ function printReport(results: readonly GateResult[], mode: CheckMode, elapsedMs:
   process.stdout.write(`${renderChecklist(rows)}\n`);
 
   if (mode === 'full') {
-    if (groupsEnabled) {
-      for (const r of results) {
-        const status = r.passed ? 'passed' : 'failed';
-        process.stdout.write(`${renderGitHubGroup(`${r.name} (${status})`, r.output, true)}\n`);
-      }
-    } else {
-      process.stdout.write(
-        renderFullOutput(results.map((r) => ({ name: r.name, output: r.output }))),
-      );
-    }
+    renderOutputSection(
+      results.map((r) => ({
+        name: r.name,
+        output: r.output,
+        annotation: r.passed ? 'passed' : 'failed',
+      })),
+      groupsEnabled,
+      () => renderFullOutput(results.map((r) => ({ name: r.name, output: r.output }))),
+    );
   } else {
     const failures = results.filter((r) => !r.passed);
-    if (groupsEnabled) {
-      for (const r of failures) {
-        process.stdout.write(`${renderGitHubGroup(`${r.name} (failed)`, r.output, true)}\n`);
-      }
-    } else {
-      process.stdout.write(
-        renderFailures(failures.map((r) => ({ name: r.name, output: r.output }))),
-      );
-    }
+    renderOutputSection(
+      failures.map((r) => ({ name: r.name, output: r.output, annotation: 'failed' })),
+      groupsEnabled,
+      () => renderFailures(failures.map((r) => ({ name: r.name, output: r.output }))),
+    );
   }
 
   const passed = results.filter((r) => r.passed).length;

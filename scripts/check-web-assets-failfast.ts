@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { access, rename, rm } from 'node:fs/promises';
+import { rename, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
@@ -96,15 +96,6 @@ async function cleanupDist(plan: WebAssetsFailFastPlan, movedDist: boolean): Pro
   }
 }
 
-async function pathExists(path: string): Promise<boolean> {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 /**
  * Runs the fail-fast check while restoring the dashboard dist afterwards.
  *
@@ -115,12 +106,13 @@ export async function runWebAssetsFailFastCheck(
   plan: WebAssetsFailFastPlan,
   buildRunner: BuildRunner = ({ command, workdir }) => spawnCaptured(command, workdir),
 ): Promise<CommandResult> {
-  const distExists = await pathExists(plan.distPath);
   let movedDist = false;
 
-  if (distExists) {
+  try {
     await rename(plan.distPath, plan.parkedDistPath);
     movedDist = true;
+  } catch {
+    // dist doesn't exist — nothing to park
   }
 
   try {
