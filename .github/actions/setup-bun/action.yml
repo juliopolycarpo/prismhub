@@ -1,0 +1,45 @@
+name: Setup Bun Workspace
+description: Setup Bun, restore dependency caches, and install workspace dependencies.
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Bun
+      id: setup-bun
+      uses: oven-sh/setup-bun@v2
+
+    - name: Cache Bun package cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-packages-${{ steps.setup-bun.outputs.bun-version }}-${{ hashFiles('bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-packages-${{ steps.setup-bun.outputs.bun-version }}-
+          ${{ runner.os }}-bun-packages-
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-modules-${{ steps.setup-bun.outputs.bun-version }}-${{ hashFiles('bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-${{ steps.setup-bun.outputs.bun-version }}-
+          ${{ runner.os }}-node-modules-
+
+    # Cross-run cache for Turbo's local cache and tooling caches under
+    # node_modules/.cache. TypeScript build info stays inside Turbo task outputs;
+    # caching it separately can restore declarations metadata without dist files.
+    - name: Cache Turbo and tooling caches
+      uses: actions/cache@v4
+      with:
+        path: |
+          .turbo
+          node_modules/.cache
+        key: ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'turbo.json', 'tsconfig*.json') }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'turbo.json', 'tsconfig*.json') }}-
+          ${{ runner.os }}-turbo-
+
+    - name: Install dependencies
+      shell: bash
+      run: bun install --frozen-lockfile

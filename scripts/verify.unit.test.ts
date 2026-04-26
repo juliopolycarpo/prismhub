@@ -2,9 +2,15 @@ import { describe, expect, test } from 'bun:test';
 import { firstFailure, getVerifyPlan, VERIFY_PLAN, type CommandRunResult } from './verify.ts';
 
 describe('getVerifyPlan()', () => {
-  test('returns check, build, boundaries in order', () => {
+  test('returns build, check, boundaries in that order', () => {
     const plan = getVerifyPlan();
-    expect(plan.map((c) => c.name)).toEqual(['check', 'build', 'boundaries']);
+    expect(plan.map((c) => c.name)).toEqual(['build', 'check', 'boundaries']);
+  });
+
+  test('uses plain `bun run check` (no --full) regardless of CI', () => {
+    const plan = getVerifyPlan();
+    const check = plan.find((c) => c.name === 'check');
+    expect(check?.argv).toEqual(['bun', 'run', 'check']);
   });
 
   test('every command shells out to bun run <name>', () => {
@@ -18,8 +24,8 @@ describe('getVerifyPlan()', () => {
 describe('firstFailure()', () => {
   test('returns null when every result has exit code 0', () => {
     const results: CommandRunResult[] = [
-      { name: 'check', exitCode: 0 },
       { name: 'build', exitCode: 0 },
+      { name: 'check', exitCode: 0 },
       { name: 'boundaries', exitCode: 0 },
     ];
     expect(firstFailure(results)).toBeNull();
@@ -27,12 +33,12 @@ describe('firstFailure()', () => {
 
   test('returns the first non-zero result and ignores later failures', () => {
     const results: CommandRunResult[] = [
-      { name: 'check', exitCode: 0 },
-      { name: 'build', exitCode: 2 },
+      { name: 'build', exitCode: 0 },
+      { name: 'check', exitCode: 2 },
       { name: 'boundaries', exitCode: 3 },
     ];
     const failure = firstFailure(results);
-    expect(failure?.name).toBe('build');
+    expect(failure?.name).toBe('check');
     expect(failure?.exitCode).toBe(2);
   });
 

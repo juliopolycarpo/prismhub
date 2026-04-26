@@ -1,0 +1,49 @@
+name: Test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Coverage runs `bun test --coverage` which already covers the unit
+          # surface; folding the unit job into coverage saves a runner.
+          - name: Unit Tests + Coverage Gate
+            command: |
+              bun run test:unit
+              bun run test:coverage
+            artifact_name: unit-coverage-results
+            upload_artifacts: true
+          - name: Integration Tests
+            command: bun run test:integration --turbo-concurrency=1
+            artifact_name: integration-test-results
+            upload_artifacts: true
+          - name: E2E Tests
+            command: bun run test:e2e
+            artifact_name: e2e-test-results
+            upload_artifacts: true
+    uses: ./.github/workflows/run-command.yml
+    secrets: inherit
+    with:
+      jobName: ${{ matrix.name }}
+      # Heavy test jobs are the only place we still hit the Vercel remote cache.
+      enableRemoteCache: true
+      turboTeam: ${{ vars.TURBO_TEAM }}
+      turboApi: ${{ vars.TURBO_API }}
+      timeoutMinutes: 30
+      command: ${{ matrix.command }}
+      uploadArtifacts: ${{ matrix.upload_artifacts }}
+      artifactName: ${{ matrix.artifact_name }}

@@ -1,0 +1,27 @@
+name: Verify
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    uses: ./.github/workflows/run-command.yml
+    secrets: inherit
+    with:
+      jobName: Verify (build · check · boundaries)
+      # Remote cache (Vercel) reserved for heavy test jobs in test.yml.
+      # GitHub Actions cache (setup-bun) covers .turbo + tsbuildinfo here.
+      enableRemoteCache: false
+      timeoutMinutes: 30
+      command: |
+        bun run check:web-assets-failfast
+        bun run verify

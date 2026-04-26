@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
+  RUNTIME_SERVER_TEST_TIMEOUT_MS,
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
@@ -19,12 +20,12 @@ let runtime: RuntimeServerHandle;
 beforeAll(async () => {
   mkdirSync(TMP_DIR, { recursive: true });
   runtime = await startRuntimeServer({ dataDirOverride: TMP_DIR });
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 afterAll(async () => {
   await shutdownRuntimeServer(runtime);
   // Intentionally do NOT cleanup TMP_DIR — left on disk for inspection.
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 async function signUp(
   baseUrl: string,

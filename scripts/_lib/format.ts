@@ -47,3 +47,14 @@ export function renderFooter(opts: FooterOptions): string {
   const hint = opts.mode === 'resume' ? '  Run `bun check --full` for complete output.' : '';
   return `${SEP}\n${failed} of ${opts.totalGates} gates failed.  (${seconds}s total)${hint}`;
 }
+
+/**
+ * Wraps a body in a GitHub Actions collapsible group. When `enabled` is false
+ * (running locally / outside Actions), returns the plain body so dev output
+ * stays readable in any terminal.
+ */
+export function renderGitHubGroup(name: string, body: string, enabled: boolean): string {
+  const trimmed = body.trimEnd();
+  if (!enabled) return trimmed;
+  return `::group::${name}\n${trimmed}\n::endgroup::`;
+}

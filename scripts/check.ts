@@ -13,7 +13,13 @@
 import { resolve } from 'node:path';
 
 import { parseArgv } from './_lib/argv';
-import { renderChecklist, renderFailures, renderFooter, renderFullOutput } from './_lib/format';
+import {
+  renderChecklist,
+  renderFailures,
+  renderFooter,
+  renderFullOutput,
+  renderGitHubGroup,
+} from './_lib/format';
 import { runGate, type GateResult } from './_lib/gate';
 import { ALL_GATES } from './_lib/gates';
 
@@ -42,7 +48,32 @@ function buildChildEnv(): Readonly<Record<string, string>> {
   };
 }
 
+function isGitHubActions(): boolean {
+  return process.env.GITHUB_ACTIONS === 'true';
+}
+
+interface GateOutputEntry {
+  readonly name: string;
+  readonly output: string;
+  readonly annotation: string;
+}
+
+function renderOutputSection(
+  entries: readonly GateOutputEntry[],
+  groupsEnabled: boolean,
+  fallback: () => string,
+): void {
+  if (groupsEnabled) {
+    for (const e of entries) {
+      process.stdout.write(`${renderGitHubGroup(`${e.name} (${e.annotation})`, e.output, true)}\n`);
+    }
+  } else {
+    process.stdout.write(fallback());
+  }
+}
+
 function printReport(results: readonly GateResult[], mode: CheckMode, elapsedMs: number): void {
+  const groupsEnabled = isGitHubActions();
   const rows = results.map((r) => ({
     passed: r.passed,
     label: r.passed ? r.passedLabel : r.failedLabel,
@@ -51,14 +82,22 @@ function printReport(results: readonly GateResult[], mode: CheckMode, elapsedMs:
   process.stdout.write(`${renderChecklist(rows)}\n`);
 
   if (mode === 'full') {
-    process.stdout.write(
-      renderFullOutput(results.map((r) => ({ name: r.name, output: r.output }))),
+    renderOutputSection(
+      results.map((r) => ({
+        name: r.name,
+        output: r.output,
+        annotation: r.passed ? 'passed' : 'failed',
+      })),
+      groupsEnabled,
+      () => renderFullOutput(results.map((r) => ({ name: r.name, output: r.output }))),
     );
   } else {
-    const failures = results
-      .filter((r) => !r.passed)
-      .map((r) => ({ name: r.name, output: r.output }));
-    process.stdout.write(renderFailures(failures));
+    const failures = results.filter((r) => !r.passed);
+    renderOutputSection(
+      failures.map((r) => ({ name: r.name, output: r.output, annotation: 'failed' })),
+      groupsEnabled,
+      () => renderFailures(failures.map((r) => ({ name: r.name, output: r.output }))),
+    );
   }
 
   const passed = results.filter((r) => r.passed).length;

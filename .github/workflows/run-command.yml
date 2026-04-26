@@ -1,0 +1,86 @@
+name: Run Bun Command
+
+on:
+  workflow_call:
+    inputs:
+      jobName:
+        description: Display name for the job.
+        required: true
+        type: string
+      command:
+        description: Bun command or shell script to run from the repository root.
+        required: true
+        type: string
+      turboTeam:
+        description: Optional Turborepo team slug for remote caching.
+        required: false
+        default: ''
+        type: string
+      turboApi:
+        description: Optional Turborepo remote cache API URL for self-hosted cache.
+        required: false
+        default: ''
+        type: string
+      enableRemoteCache:
+        description: Enable Turborepo remote caching for this job.
+        required: false
+        default: false
+        type: boolean
+      timeoutMinutes:
+        description: Job timeout in minutes.
+        required: false
+        default: 20
+        type: number
+      uploadArtifacts:
+        description: Upload test artifacts from .prismhub/tests after the command finishes.
+        required: false
+        default: false
+        type: boolean
+      artifactName:
+        description: Artifact name when upload-artifacts is enabled.
+        required: false
+        default: test-results
+        type: string
+    secrets:
+      TURBO_TOKEN:
+        description: Optional Turborepo token for remote caching in CI.
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    name: ${{ inputs.jobName }}
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeoutMinutes }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup workspace
+        uses: ./.github/actions/setup-bun
+
+      - name: Run command
+        shell: bash
+        env:
+          TURBO_TOKEN: ${{ inputs.enableRemoteCache && secrets.TURBO_TOKEN || '' }}
+          TURBO_TEAM: ${{ inputs.enableRemoteCache && inputs.turboTeam || '' }}
+          TURBO_API: ${{ inputs.enableRemoteCache && inputs.turboApi || '' }}
+        run: |
+          set -o pipefail
+          echo "::group::${{ inputs.jobName }}"
+          set +e
+          ${{ inputs.command }}
+          status=$?
+          set -e
+          echo "::endgroup::"
+          exit $status
+
+      - name: Upload test artifacts
+        if: ${{ always() && inputs.uploadArtifacts }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifactName }}
+          path: .prismhub/tests
+          if-no-files-found: ignore

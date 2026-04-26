@@ -6,6 +6,8 @@ const TEST_PORT_BASE = 39_741;
 const TEST_PORT_RANGE = 1_000;
 const TEST_AUTH_SECRET = 'prismhub-test-only-secret-do-not-use-in-production-xxxxxxxxxxxxxxxx';
 
+export const RUNTIME_SERVER_TEST_TIMEOUT_MS = 30_000;
+
 export interface RuntimeServerHandle {
   readonly baseUrl: string;
   readonly host: string;
@@ -89,16 +91,18 @@ export async function startRuntimeServer(
   };
 }
 
-export async function shutdownRuntimeServer(runtime: RuntimeServerHandle): Promise<void> {
-  if (runtime.stopped) return;
+export async function shutdownRuntimeServer(
+  runtime: RuntimeServerHandle | undefined,
+): Promise<void> {
+  if (!runtime || runtime.stopped) return;
 
   runtime.stopped = true;
   runtime.process.kill('SIGTERM');
   await runtime.process.exited;
 }
 
-export function cleanupRuntimeServer(runtime: RuntimeServerHandle): void {
-  if (runtime.skipCleanup) return;
+export function cleanupRuntimeServer(runtime: RuntimeServerHandle | undefined): void {
+  if (!runtime || runtime.skipCleanup) return;
   runtime.tempDir.cleanup();
 }
 

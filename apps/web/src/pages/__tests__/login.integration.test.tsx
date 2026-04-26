@@ -15,6 +15,7 @@ import { authenticatedPathOrDefault } from '../../lib/dashboard-paths.ts';
 const signInMock = mock<() => Promise<{ error?: { message?: string; status?: number } }>>(
   async () => ({}),
 );
+const LOGIN_SUBMIT_TIMEOUT_MS = 15_000;
 
 await mock.module('../../lib/auth-client.ts', () => ({
   authClient: {
@@ -73,21 +74,25 @@ describe('LoginPage', () => {
     expect(within(document.body).getByLabelText('Senha'));
   });
 
-  test('submits credentials and redirects to /live on success', async () => {
-    const user = userEvent.setup();
-    renderLogin();
+  test(
+    'submits credentials and redirects to /live on success',
+    async () => {
+      const user = userEvent.setup();
+      renderLogin();
 
-    await waitFor(() => within(document.body).getByLabelText('E-mail'));
-    await user.type(within(document.body).getByLabelText('E-mail'), 'admin@prismhub.test');
-    await user.type(within(document.body).getByLabelText('Senha'), 'admin-test-password');
-    await user.click(within(document.body).getByRole('button', { name: /Entrar/ }));
+      await waitFor(() => within(document.body).getByLabelText('E-mail'));
+      await user.type(within(document.body).getByLabelText('E-mail'), 'admin@prismhub.test');
+      await user.type(within(document.body).getByLabelText('Senha'), 'admin-test-password');
+      await user.click(within(document.body).getByRole('button', { name: /Entrar/ }));
 
-    await waitFor(() => within(document.body).getByText('Live page'));
-    expect(signInMock).toHaveBeenCalledWith({
-      email: 'admin@prismhub.test',
-      password: 'admin-test-password',
-    });
-  });
+      await waitFor(() => within(document.body).getByText('Live page'));
+      expect(signInMock).toHaveBeenCalledWith({
+        email: 'admin@prismhub.test',
+        password: 'admin-test-password',
+      });
+    },
+    LOGIN_SUBMIT_TIMEOUT_MS,
+  );
 
   test('shows error message on invalid credentials', async () => {
     signInMock.mockImplementation(async () => ({

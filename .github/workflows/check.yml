@@ -1,0 +1,31 @@
+name: Check
+
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    uses: ./.github/workflows/run-command.yml
+    secrets: inherit
+    with:
+      jobName: Check (typecheck · lint · format · policy · boundaries)
+      # Remote cache (Vercel) is intentionally OFF here — the GitHub Actions
+      # cache configured in setup-bun (.turbo, *.tsbuildinfo, node_modules/.cache)
+      # is enough for these fast gates and avoids 429 ratelimits.
+      enableRemoteCache: false
+      timeoutMinutes: 20
+      command: |
+        bun run typecheck
+        bun run lint
+        bun run format
+        bun run test:policy
+        bun run boundaries

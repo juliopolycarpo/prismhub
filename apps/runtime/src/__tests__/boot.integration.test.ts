@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import {
   bootstrapAdminCookie,
   cleanupRuntimeServer,
+  RUNTIME_SERVER_TEST_TIMEOUT_MS,
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
@@ -13,12 +14,12 @@ let adminCookie: string;
 beforeAll(async () => {
   runtime = await startRuntimeServer();
   adminCookie = await bootstrapAdminCookie(runtime.baseUrl);
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 afterAll(async () => {
   await shutdownRuntimeServer(runtime);
   cleanupRuntimeServer(runtime);
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 describe('boot smoke test', () => {
   test('GET /healthz returns ok', async () => {

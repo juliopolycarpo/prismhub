@@ -3,8 +3,9 @@
  * `bun verify` — final handoff gate. Runs sequentially, fails fast.
  *
  * Order:
- *   1. `bun run check`       — fast gates (typecheck, lint, format, unit, integration, etc.)
- *   2. `bun run build`       — full workspace build
+ *   1. `bun run build`       — full workspace build (warms turbo cache)
+ *   2. `bun run check`       — fast gates; resume mode keeps CI output tight
+ *                              (only failed gates dump captured output)
  *   3. `bun run boundaries`  — turbo boundaries (no cycles, no missing deps)
  *
  * Stops at the first non-zero exit and propagates that exit code.
@@ -19,8 +20,8 @@ export interface VerifyCommand {
 }
 
 export const VERIFY_PLAN: readonly VerifyCommand[] = [
-  { name: 'check', argv: ['bun', 'run', 'check'] },
   { name: 'build', argv: ['bun', 'run', 'build'] },
+  { name: 'check', argv: ['bun', 'run', 'check'] },
   { name: 'boundaries', argv: ['bun', 'run', 'boundaries'] },
 ];
 
@@ -68,5 +69,5 @@ export async function runVerify(plan: readonly VerifyCommand[] = VERIFY_PLAN): P
 }
 
 if (import.meta.main) {
-  process.exit(await runVerify());
+  process.exit(await runVerify(getVerifyPlan()));
 }

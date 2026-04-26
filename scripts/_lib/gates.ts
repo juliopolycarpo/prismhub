@@ -1,3 +1,6 @@
+import { statSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import {
   joinOutput,
   spawnCaptured,
@@ -10,15 +13,29 @@ import { parseBunTestCounts } from './parsers/bunTest';
 import { parseTscOutput } from './parsers/tsc';
 import { parsePrettierCheck } from './parsers/prettier';
 import { listRootScriptUnitTests } from './test-files';
+import { rootScriptsTypecheckCommand } from './typecheck-command';
 
 const BUN = process.execPath;
+// Resolve the turbo binary directly to skip the `bun x` resolver cold start.
+// Falls back to `bun x turbo` for environments where the binary isn't present.
+const TURBO_BIN: readonly string[] = resolveTurboBinary();
+
+function resolveTurboBinary(): readonly string[] {
+  const direct = resolve(import.meta.dir, '../../node_modules/.bin/turbo');
+  try {
+    if (statSync(direct).isFile()) return [direct];
+  } catch {
+    // fallthrough
+  }
+  return [BUN, 'x', 'turbo'];
+}
 
 function baseSpawnOpts(ctx: GateContext): SpawnCaptureOptions {
   return { cwd: ctx.repoRoot, env: ctx.env, signal: ctx.signal };
 }
 
 function turboRun(task: string, extra: readonly string[] = []): readonly string[] {
-  return [BUN, 'x', 'turbo', 'run', task, ...extra];
+  return [...TURBO_BIN, 'run', task, ...extra];
 }
 
 interface SimpleGateLabels {
@@ -53,7 +70,7 @@ export const typecheckGate: Gate = {
     const opts = baseSpawnOpts(ctx);
     const [turbo, scripts] = await Promise.all([
       spawnCaptured(turboRun('typecheck', ['--output-logs=errors-only']), opts),
-      spawnCaptured([BUN, 'x', 'tsc', '--noEmit', '-p', 'scripts/tsconfig.json'], opts),
+      spawnCaptured(rootScriptsTypecheckCommand(), opts),
     ]);
 
     const output = `${joinOutput(turbo)}\n${joinOutput(scripts)}`;

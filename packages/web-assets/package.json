@@ -8,13 +8,13 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit && tsc --noEmit -p scripts/tsconfig.json",
+    "typecheck": "tsc --noEmit --tsBuildInfoFile typecheck.tsbuildinfo && tsc --noEmit -p scripts/tsconfig.json --tsBuildInfoFile scripts/typecheck.tsbuildinfo",
     "lint": "eslint src scripts --max-warnings=0",
     "lint:fix": "eslint src scripts --fix",
     "test": "bun test",
     "test:unit": "bun test unit.test",
     "test:integration": "bun test integration.test",
-    "build": "bun ./scripts/generate.ts --mode=release && tsc --build",
+    "build": "bun ./scripts/generate.ts --mode=release && tsc --build --force",
     "generate": "bun ./scripts/generate.ts --mode=dev",
     "generate:release": "bun ./scripts/generate.ts --mode=release",
     "clean": "rm -rf dist .turbo *.tsbuildinfo src/manifest.generated.ts scripts/*.d.ts scripts/*.d.ts.map scripts/*.tsbuildinfo"

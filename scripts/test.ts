@@ -15,14 +15,13 @@ import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parseArgv } from './_lib/argv';
 import { getRunId } from './_lib/run-id';
-import { inheritSpawn } from './_lib/spawn';
+import { inheritSpawn, turboRunCommand } from './_lib/spawn';
 import { teeSpawn, REPO_ROOT } from './_lib/tee-spawn';
 import { listRootScriptUnitTests } from './_lib/test-files';
 
-const BUN = process.execPath;
-
 type Mode = 'all' | 'unit' | 'integration' | 'e2e';
 type Suite = 'unit' | 'integration' | 'e2e' | 'scripts-unit';
+type TurboTestTask = 'test:unit' | 'test:integration' | 'test:e2e';
 
 interface SuiteRecord {
   readonly kind: Suite;
@@ -30,6 +29,12 @@ interface SuiteRecord {
   readonly durationMs: number;
   readonly logPath: string;
   readonly command: readonly string[];
+  /**
+   * True when the underlying turbo task short-circuited via cache or had no
+   * tests to run. Surfaced in `summary.json` so successful zero-test runs
+   * are visible instead of looking identical to a real pass.
+   */
+  readonly cached: boolean;
 }
 
 function resolveMode(flags: ReadonlySet<string>): Mode {
@@ -39,10 +44,17 @@ function resolveMode(flags: ReadonlySet<string>): Mode {
   return 'all';
 }
 
-function turboTaskFor(mode: Exclude<Mode, 'all'>): 'test:unit' | 'test:integration' | 'test:e2e' {
+function turboTaskFor(mode: Exclude<Mode, 'all'>): TurboTestTask {
   if (mode === 'unit') return 'test:unit';
   if (mode === 'integration') return 'test:integration';
   return 'test:e2e';
+}
+
+export function turboRunTestCommand(
+  task: TurboTestTask,
+  turboConcurrency: string | undefined,
+): readonly string[] {
+  return turboRunCommand(task, [], turboConcurrency ? [`--concurrency=${turboConcurrency}`] : []);
 }
 
 interface RunContext {
@@ -50,13 +62,20 @@ interface RunContext {
   readonly resultsDir: string;
   readonly env: Record<string, string>;
   readonly suites: SuiteRecord[];
+  readonly turboConcurrency: string | undefined;
 }
 
-function createRunContext(): RunContext {
+function createRunContext(turboConcurrency: string | undefined): RunContext {
   const runId = getRunId();
   const resultsDir = resolve(REPO_ROOT, '.prismhub/tests', runId, 'results');
   mkdirSync(resultsDir, { recursive: true });
-  return { runId, resultsDir, env: { PRISMHUB_TEST_RUN_ID: runId }, suites: [] };
+  return {
+    runId,
+    resultsDir,
+    env: { PRISMHUB_TEST_RUN_ID: runId },
+    suites: [],
+    turboConcurrency,
+  };
 }
 
 async function runWorkspaceSuite(
@@ -64,7 +83,7 @@ async function runWorkspaceSuite(
   mode: Exclude<Mode, 'all'>,
   kind: Suite,
 ): Promise<number> {
-  const command = [BUN, 'x', 'turbo', 'run', turboTaskFor(mode)];
+  const command = turboRunTestCommand(turboTaskFor(mode), ctx.turboConcurrency);
   const logPath = resolve(ctx.resultsDir, `${kind}.log.txt`);
   const result = await teeSpawn(command, logPath, ctx.env);
   ctx.suites.push({
@@ -73,6 +92,7 @@ async function runWorkspaceSuite(
     durationMs: result.durationMs,
     logPath,
     command,
+    cached: await detectCachedRun(logPath),
   });
   return result.exitCode;
 }
@@ -80,7 +100,7 @@ async function runWorkspaceSuite(
 async function runRootScriptsSuite(ctx: RunContext): Promise<number> {
   const files = await listRootScriptUnitTests();
   if (files.length === 0) return 0;
-  const command = [BUN, 'test', ...files];
+  const command = [process.execPath, 'test', ...files];
   const logPath = resolve(ctx.resultsDir, 'scripts-unit.log.txt');
   const result = await teeSpawn(command, logPath, ctx.env);
   ctx.suites.push({
@@ -89,8 +109,23 @@ async function runRootScriptsSuite(ctx: RunContext): Promise<number> {
     durationMs: result.durationMs,
     logPath,
     command,
+    cached: false,
   });
   return result.exitCode;
+}
+
+/**
+ * Heuristic: turbo prints lines like "cache hit, replaying logs" or
+ * "cache hit, suppressing logs" when a task short-circuits. Reads the
+ * captured log once after the run; missing or unreadable logs return false.
+ */
+async function detectCachedRun(logPath: string): Promise<boolean> {
+  try {
+    const text = await Bun.file(logPath).text();
+    return /cache hit/i.test(text);
+  } catch {
+    return false;
+  }
 }
 
 async function runUnit(ctx: RunContext): Promise<number> {
@@ -130,37 +165,38 @@ async function dispatch(ctx: RunContext, mode: Mode): Promise<number> {
   return runWorkspaceSuite(ctx, 'e2e', 'e2e');
 }
 
-async function runLegacy(mode: Mode): Promise<number> {
+async function runLegacy(mode: Mode, turboConcurrency: string | undefined): Promise<number> {
   if (mode !== 'all') {
     if (mode === 'unit') {
-      const workspace = await inheritSpawn([BUN, 'x', 'turbo', 'run', 'test:unit']);
+      const workspace = await inheritSpawn(turboRunTestCommand('test:unit', turboConcurrency));
       if (workspace !== 0) return workspace;
       const files = await listRootScriptUnitTests();
       if (files.length === 0) return 0;
-      return inheritSpawn([BUN, 'test', ...files]);
+      return inheritSpawn([process.execPath, 'test', ...files]);
     }
-    return inheritSpawn([BUN, 'x', 'turbo', 'run', turboTaskFor(mode)]);
+    return inheritSpawn(turboRunTestCommand(turboTaskFor(mode), turboConcurrency));
   }
 
-  const unit = await inheritSpawn([BUN, 'x', 'turbo', 'run', 'test:unit']);
+  const unit = await inheritSpawn(turboRunTestCommand('test:unit', turboConcurrency));
   if (unit !== 0) return unit;
   const files = await listRootScriptUnitTests();
   if (files.length > 0) {
-    const scripts = await inheritSpawn([BUN, 'test', ...files]);
+    const scripts = await inheritSpawn([process.execPath, 'test', ...files]);
     if (scripts !== 0) return scripts;
   }
-  const integration = await inheritSpawn([BUN, 'x', 'turbo', 'run', 'test:integration']);
+  const integration = await inheritSpawn(turboRunTestCommand('test:integration', turboConcurrency));
   if (integration !== 0) return integration;
-  return inheritSpawn([BUN, 'x', 'turbo', 'run', 'test:e2e']);
+  return inheritSpawn(turboRunTestCommand('test:e2e', turboConcurrency));
 }
 
 async function main(): Promise<number> {
   const args = parseArgv(process.argv.slice(2));
   const mode = resolveMode(args.flags);
+  const turboConcurrency = args.options.get('turbo-concurrency');
 
-  if (args.flags.has('no-artifacts')) return runLegacy(mode);
+  if (args.flags.has('no-artifacts')) return runLegacy(mode, turboConcurrency);
 
-  const ctx = createRunContext();
+  const ctx = createRunContext(turboConcurrency);
   const startedAt = new Date().toISOString();
   const exitCode = await dispatch(ctx, mode);
   const finishedAt = new Date().toISOString();
