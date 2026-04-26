@@ -5,12 +5,12 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig*.json", "src/**/*.ts", "src/**/*.tsx"],
-      "outputs": ["dist/**", "src/manifest.generated.ts", "*.tsbuildinfo"]
+      "outputs": ["dist/**", "src/manifest.generated.ts", "tsconfig.tsbuildinfo"]
     },
     "compile": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig*.json", "src/**/*.ts", "src/**/*.tsx"],
-      "outputs": ["dist/**", "*.tsbuildinfo"]
+      "outputs": ["dist/**"]
     },
     "dev": {
       "cache": false,
@@ -39,7 +39,7 @@
         "src/**/*.ts",
         "src/**/*.tsx"
       ],
-      "outputs": ["*.tsbuildinfo", "**/*.tsbuildinfo"]
+      "outputs": ["typecheck.tsbuildinfo", "scripts/typecheck.tsbuildinfo"]
     },
     "test": {
       "dependsOn": ["^build"],
