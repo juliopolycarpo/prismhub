@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit && tsc --noEmit -p scripts/tsconfig.json",
+    "typecheck": "tsc --noEmit --tsBuildInfoFile typecheck.tsbuildinfo && tsc --noEmit -p scripts/tsconfig.json --tsBuildInfoFile scripts/typecheck.tsbuildinfo",
     "lint": "eslint src scripts --max-warnings=0",
     "lint:fix": "eslint src scripts --fix",
     "test": "bun test",

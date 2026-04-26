@@ -12,7 +12,7 @@
     "start": "bun ./src/main.ts serve",
     "build": "bun build ./src/main.ts --target=bun --outdir ./dist",
     "compile": "bun build ./src/main.ts --compile --target=bun --minify --sourcemap=none --outfile ./dist/prismhub",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit --tsBuildInfoFile typecheck.tsbuildinfo",
     "lint": "eslint src --max-warnings=0",
     "lint:fix": "eslint src --fix",
     "test": "bun test",

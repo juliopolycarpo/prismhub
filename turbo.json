@@ -23,7 +23,7 @@
     },
     "typecheck": {
       "dependsOn": ["^build", "^typecheck"],
-      "outputs": ["*.tsbuildinfo"]
+      "outputs": []
     },
     "test": {
       "dependsOn": ["^build"],
