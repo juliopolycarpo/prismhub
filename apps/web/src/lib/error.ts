@@ -1,6 +1,4 @@
-export function getErrorMessage(error: unknown, fallback: string): string {
-  return error instanceof Error ? error.message : fallback;
-}
+export { getErrorMessage } from '@prismhub/observability';
 
 export function hasErrorCode(error: unknown, code: string): boolean {
   if (!error || typeof error !== 'object') return false;

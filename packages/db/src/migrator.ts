@@ -38,9 +38,9 @@ async function revertMigration(db: PrismDatabase, migration: Migration): Promise
   });
 }
 
-export async function runMigrations(
+async function applyMigrationsForward(
   db: PrismDatabase,
-  migrations: readonly Migration[] = MIGRATIONS,
+  migrations: readonly Migration[],
 ): Promise<MigrationResult> {
   await ensureMigrationsTable(db);
   const alreadyApplied = await loadAppliedMigrationNames(db);
@@ -59,9 +59,9 @@ export async function runMigrations(
   return { applied, alreadyApplied: skipped };
 }
 
-export async function revertMigrations(
+async function applyMigrationsInReverse(
   db: PrismDatabase,
-  migrations: readonly Migration[] = MIGRATIONS,
+  migrations: readonly Migration[],
 ): Promise<MigrationResult> {
   await ensureMigrationsTable(db);
   const applied = await loadAppliedMigrationNames(db);
@@ -78,4 +78,18 @@ export async function revertMigrations(
   }
 
   return { applied: reverted, alreadyApplied: skipped };
+}
+
+export async function runMigrations(
+  db: PrismDatabase,
+  migrations: readonly Migration[] = MIGRATIONS,
+): Promise<MigrationResult> {
+  return applyMigrationsForward(db, migrations);
+}
+
+export async function revertMigrations(
+  db: PrismDatabase,
+  migrations: readonly Migration[] = MIGRATIONS,
+): Promise<MigrationResult> {
+  return applyMigrationsInReverse(db, migrations);
 }

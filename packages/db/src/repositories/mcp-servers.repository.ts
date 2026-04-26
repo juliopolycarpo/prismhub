@@ -75,6 +75,14 @@ export async function listMcpServers(db: PrismDatabase): Promise<readonly McpSer
   return rows.map(rowToDomain);
 }
 
+export async function countMcpServers(db: PrismDatabase): Promise<number> {
+  const row = await db
+    .selectFrom('mcp_servers')
+    .select((eb) => eb.fn.countAll<number>().as('count'))
+    .executeTakeFirstOrThrow();
+  return Number(row.count);
+}
+
 export async function getMcpServerByIdOrThrow(
   db: PrismDatabase,
   id: string,

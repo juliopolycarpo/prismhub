@@ -6,6 +6,8 @@ import { CompiledQuery } from 'kysely';
 import type { BunSqliteDialectOptions } from './dialect.types.ts';
 import { BunSqliteConnection } from './connection.ts';
 
+const SQLITE_BUSY_TIMEOUT_MS = 5000;
+
 const BEGIN = CompiledQuery.raw('begin');
 const COMMIT = CompiledQuery.raw('commit');
 const ROLLBACK = CompiledQuery.raw('rollback');
@@ -39,7 +41,7 @@ export class BunSqliteDriver implements Driver {
     });
     this.#db.exec('PRAGMA journal_mode = WAL;');
     this.#db.exec('PRAGMA foreign_keys = ON;');
-    this.#db.exec('PRAGMA busy_timeout = 5000;');
+    this.#db.exec(`PRAGMA busy_timeout = ${SQLITE_BUSY_TIMEOUT_MS};`);
     this.#connection = new BunSqliteConnection(this.#db);
   }
 

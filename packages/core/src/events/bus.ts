@@ -26,10 +26,10 @@ export function createEventBus(options: EventBusOptions = {}): EventBus {
   return {
     publish(topic, event) {
       const state = getOrCreate(topic);
-      state.buffer.push(event);
-      if (state.buffer.length > bufferSize) {
+      if (state.buffer.length >= bufferSize) {
         state.buffer.shift();
       }
+      state.buffer.push(event);
       for (const subscriber of state.subscribers) {
         try {
           subscriber(event);
