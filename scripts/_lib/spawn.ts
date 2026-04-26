@@ -31,6 +31,8 @@ export async function runTurboTask(
 
 /**
  * Spawns a child process that inherits stdio, so the user sees live output.
+ * Forwards SIGINT/SIGTERM/SIGHUP to the child so CI cancellations and Ctrl-C
+ * propagate correctly (otherwise turbo/runtime children orphan).
  * Returns the exit code; callers typically `process.exit(code)` after.
  */
 export async function inheritSpawn(command: readonly string[]): Promise<number> {
@@ -40,5 +42,20 @@ export async function inheritSpawn(command: readonly string[]): Promise<number> 
     stdout: 'inherit',
     stderr: 'inherit',
   });
-  return proc.exited;
+  const forwarded: readonly NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGHUP'];
+  const forward = (signal: NodeJS.Signals): void => {
+    proc.kill(signal);
+  };
+  const handlers = forwarded.map((signal) => {
+    const handler = (): void => forward(signal);
+    process.on(signal, handler);
+    return [signal, handler] as const;
+  });
+  try {
+    return await proc.exited;
+  } finally {
+    for (const [signal, handler] of handlers) {
+      process.off(signal, handler);
+    }
+  }
 }

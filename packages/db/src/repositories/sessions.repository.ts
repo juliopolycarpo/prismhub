@@ -1,3 +1,4 @@
+import type { Selectable } from 'kysely';
 import type { PrismDatabase } from '../client.ts';
 import type { SessionsTable } from '../schema.types.ts';
 import { parseJsonObject } from '../json-utils.ts';
@@ -17,7 +18,7 @@ export interface SessionRow {
   readonly metadata: Record<string, unknown> | null;
 }
 
-function rowToDomain(row: SessionsTable): SessionRow {
+function rowToDomain(row: Selectable<SessionsTable>): SessionRow {
   return {
     id: row.id,
     source: row.source,

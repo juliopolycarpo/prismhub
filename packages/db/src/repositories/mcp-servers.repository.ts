@@ -1,4 +1,4 @@
-import type { Updateable } from 'kysely';
+import type { Selectable, Updateable } from 'kysely';
 import type { PrismDatabase } from '../client.ts';
 import type { McpServersTable } from '../schema.types.ts';
 import { parseJsonStringArray, parseJsonStringRecord } from '../json-utils.ts';
@@ -18,12 +18,19 @@ export interface McpServerRow {
   readonly updatedAt: string;
 }
 
-function rowToDomain(row: McpServersTable): McpServerRow {
+function parseTransport(value: string, serverId: string): McpServerRow['transport'] {
+  if (value === 'stdio' || value === 'http') return value;
+  throw new Error(
+    `mcp_servers.transport has unsupported value ${JSON.stringify(value)} for id=${serverId}; expected stdio or http`,
+  );
+}
+
+function rowToDomain(row: Selectable<McpServersTable>): McpServerRow {
   return {
     id: row.id,
     name: row.name,
     description: row.description,
-    transport: row.transport === 'http' ? 'http' : 'stdio',
+    transport: parseTransport(row.transport, row.id),
     command: row.command,
     args: parseJsonStringArray(row.args_json),
     url: row.url,

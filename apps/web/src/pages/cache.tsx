@@ -1,14 +1,13 @@
 import type { CacheEntry } from '@prismhub/contracts';
 import { useQuery } from '@tanstack/react-query';
 import { Download } from 'lucide-react';
+import { QueryView } from '../components/query-view.tsx';
 import { Badge, Button, Card, StatCard } from '../components/ui.tsx';
 import {
   cacheEntriesQueryOptions,
   cacheStatsQueryOptions,
   type CacheStats,
 } from '../lib/app-queries.ts';
-
-const EMPTY_CACHE_ENTRIES: readonly CacheEntry[] = [];
 
 export function CachePage() {
   const stats = useQuery(cacheStatsQueryOptions());
@@ -32,24 +31,28 @@ export function CachePage() {
       </header>
 
       <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-8">
-        <StatsGrid stats={stats.data ?? null} isError={stats.isError} />
-        <EntriesTable entries={entries.data ?? EMPTY_CACHE_ENTRIES} isError={entries.isError} />
+        <QueryView
+          query={stats}
+          loadingMessage="Carregando estatísticas…"
+          errorFallback="Falha ao carregar estatísticas."
+        >
+          {(data) => <StatsGrid stats={data} />}
+        </QueryView>
+        <QueryView
+          query={entries}
+          loadingMessage="Carregando entradas em cache…"
+          errorFallback="Falha ao carregar entradas em cache."
+          emptyMessage="Nenhuma entrada em cache ainda."
+          isEmpty={(rows) => rows.length === 0}
+        >
+          {(rows) => <EntriesTable entries={rows} />}
+        </QueryView>
       </div>
     </div>
   );
 }
 
-function StatsGrid({
-  stats,
-  isError,
-}: {
-  readonly stats: CacheStats | null;
-  readonly isError: boolean;
-}) {
-  if (isError) return <p className="text-sm text-red-400">Falha ao carregar estatísticas.</p>;
-  if (!stats) {
-    return <p className="text-sm text-stone-500">Carregando estatísticas…</p>;
-  }
+function StatsGrid({ stats }: { readonly stats: CacheStats }) {
   return (
     <div className="grid grid-cols-4 gap-4">
       <StatCard
@@ -72,27 +75,7 @@ function StatsGrid({
   );
 }
 
-function EntriesTable({
-  entries,
-  isError,
-}: {
-  readonly entries: readonly CacheEntry[];
-  readonly isError: boolean;
-}) {
-  if (isError) {
-    return (
-      <Card className="bg-stone-900/30 overflow-hidden border-stone-800 p-8 text-center">
-        <p className="text-sm text-red-400">Falha ao carregar entradas em cache.</p>
-      </Card>
-    );
-  }
-  if (entries.length === 0) {
-    return (
-      <Card className="bg-stone-900/30 overflow-hidden border-stone-800 p-8 text-center">
-        <p className="text-sm text-stone-500">Nenhuma entrada em cache ainda.</p>
-      </Card>
-    );
-  }
+function EntriesTable({ entries }: { readonly entries: readonly CacheEntry[] }) {
   return (
     <Card className="bg-stone-900/30 overflow-hidden border-stone-800">
       <div className="overflow-x-auto">

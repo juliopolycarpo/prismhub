@@ -1,8 +1,6 @@
 #!/usr/bin/env bun
-import { runtimeCommand } from './_lib/runtime-command';
-import { inheritSpawn } from './_lib/spawn';
+import { runRuntimeScript } from './_lib/runtime-script';
 
 if (import.meta.main) {
-  const code = await inheritSpawn(runtimeCommand('serve', process.argv.slice(2)));
-  process.exit(code);
+  process.exit(await runRuntimeScript('serve', process.argv.slice(2)));
 }
