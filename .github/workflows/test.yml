@@ -28,7 +28,7 @@ jobs:
             artifact_name: unit-coverage-results
             upload_artifacts: true
           - name: Integration Tests
-            command: bun run test:integration
+            command: bun run test:integration --turbo-concurrency=1
             artifact_name: integration-test-results
             upload_artifacts: true
           - name: E2E Tests
