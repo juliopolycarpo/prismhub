@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 
 const PACKAGE_TSCONFIG = `${import.meta.dir}/../tsconfig.json`;
+const TYPECHECK_TIMEOUT_MS = 30_000;
+const TYPECHECK_BUILD_INFO = `${Bun.env.TMPDIR ?? '/tmp'}/prismhub-web-assets-tsconfig-${Bun.nanoseconds()}.tsbuildinfo`;
 const LEGACY_DECLARATION_ARTIFACTS = [
   'generate.d.ts',
   'generate.d.ts.map',
@@ -12,7 +14,18 @@ const LEGACY_DECLARATION_ARTIFACTS = [
 
 async function runPackageTypecheck(): Promise<{ exitCode: number; output: string }> {
   const process = Bun.spawn(
-    ['bun', 'x', 'tsc', '--project', PACKAGE_TSCONFIG, '--noEmit', '--pretty', 'false'],
+    [
+      'bun',
+      'x',
+      'tsc',
+      '--project',
+      PACKAGE_TSCONFIG,
+      '--noEmit',
+      '--tsBuildInfoFile',
+      TYPECHECK_BUILD_INFO,
+      '--pretty',
+      'false',
+    ],
     {
       stdout: 'pipe',
       stderr: 'pipe',
@@ -32,11 +45,15 @@ async function runPackageTypecheck(): Promise<{ exitCode: number; output: string
 }
 
 describe('packages/web-assets tsconfig', () => {
-  test('typechecks src without pulling script tests into rootDir', async () => {
-    const { exitCode, output } = await runPackageTypecheck();
-    expect(exitCode).toBe(0);
-    expect(output).not.toContain('TS6059');
-  });
+  test(
+    'typechecks src without pulling script tests into rootDir',
+    async () => {
+      const { exitCode, output } = await runPackageTypecheck();
+      expect(exitCode).toBe(0);
+      expect(output).not.toContain('TS6059');
+    },
+    TYPECHECK_TIMEOUT_MS,
+  );
 
   test('does not keep legacy declaration artifacts', async () => {
     for (const artifact of LEGACY_DECLARATION_ARTIFACTS) {

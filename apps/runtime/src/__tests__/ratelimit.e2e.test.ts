@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import {
   bootstrapAdminCookie,
   cleanupRuntimeServer,
+  RUNTIME_SERVER_TEST_TIMEOUT_MS,
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
@@ -14,12 +15,12 @@ let runtime: RuntimeServerHandle;
 beforeAll(async () => {
   runtime = await startRuntimeServer();
   await bootstrapAdminCookie(runtime.baseUrl, ADMIN);
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 afterAll(async () => {
   await shutdownRuntimeServer(runtime);
   cleanupRuntimeServer(runtime);
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 describe('rate limiter', () => {
   test('5th wrong-pass attempt returns 429', async () => {

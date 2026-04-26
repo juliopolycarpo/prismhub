@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import {
   cleanupRuntimeServer,
+  RUNTIME_SERVER_TEST_TIMEOUT_MS,
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
@@ -48,12 +49,12 @@ async function closeMcpSession(baseUrl: string, sessionId: string): Promise<void
 
 beforeAll(async () => {
   runtime = await startRuntimeServer();
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 afterAll(async () => {
   await shutdownRuntimeServer(runtime);
   cleanupRuntimeServer(runtime);
-});
+}, RUNTIME_SERVER_TEST_TIMEOUT_MS);
 
 describe('runtime MCP over HTTP', () => {
   test('lists and calls runtime MCP tools', async () => {
