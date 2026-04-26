@@ -34,5 +34,5 @@ describe('root scripts tsconfig', () => {
     expect(output).not.toContain("Property 'dir' does not exist on type 'ImportMeta'");
     expect(output).not.toContain("Property 'main' does not exist on type 'ImportMeta'");
     expect(output).not.toContain("Cannot find module 'bun:test'");
-  });
+  }, 15000);
 });

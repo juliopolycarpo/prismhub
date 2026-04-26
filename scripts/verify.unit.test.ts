@@ -1,10 +1,23 @@
 import { describe, expect, test } from 'bun:test';
-import { firstFailure, getVerifyPlan, VERIFY_PLAN, type CommandRunResult } from './verify.ts';
+import {
+  firstFailure,
+  getVerifyPlan,
+  shouldUseFullCheckOutput,
+  VERIFY_PLAN,
+  type CommandRunResult,
+} from './verify.ts';
 
 describe('getVerifyPlan()', () => {
-  test('returns check, build, boundaries in order', () => {
-    const plan = getVerifyPlan();
+  test('returns check, build, boundaries in order outside CI', () => {
+    const plan = getVerifyPlan({});
     expect(plan.map((c) => c.name)).toEqual(['check', 'build', 'boundaries']);
+    expect(plan[0]?.argv).toEqual(['bun', 'run', 'check']);
+  });
+
+  test('uses check --full in CI', () => {
+    const plan = getVerifyPlan({ CI: 'true' });
+
+    expect(plan[0]?.argv).toEqual(['bun', 'run', 'check', '--full']);
   });
 
   test('every command shells out to bun run <name>', () => {
@@ -12,6 +25,16 @@ describe('getVerifyPlan()', () => {
       expect(cmd.argv[0]).toBe('bun');
       expect(cmd.argv[1]).toBe('run');
     }
+  });
+});
+
+describe('shouldUseFullCheckOutput()', () => {
+  test('returns true for CI=true', () => {
+    expect(shouldUseFullCheckOutput({ CI: 'true' })).toBe(true);
+  });
+
+  test('returns false outside CI', () => {
+    expect(shouldUseFullCheckOutput({})).toBe(false);
   });
 });
 
