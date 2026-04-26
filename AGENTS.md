@@ -22,7 +22,7 @@
 - Pull requests also run `Verify`, which executes `bun run verify` as the final handoff gate.
 - Shared CI job wiring lives in `.github/workflows/run-command.yml`.
 - Shared CI bootstrap lives in `.github/actions/setup-bun/action.yml`.
-- Turborepo remote cache is enabled automatically in CI when `TURBO_TOKEN` and `TURBO_TEAM` (and optionally `TURBO_API`) are configured in GitHub.
+- Turborepo remote cache is enabled in `Check` and `Verify` when `TURBO_TOKEN` and `TURBO_TEAM` (and optionally `TURBO_API`) are configured in GitHub.
 - `bun run verify` is the final handoff gate: `check -> build -> boundaries`.
 - `bun run check` runs 8 gates in parallel: typecheck, lint, format, unit, integration, e2e, coverage, policy.
 - `bun run typecheck` also checks root `scripts/` with `tsc --noEmit -p scripts/tsconfig.json`; Turbo does not cover those files by itself.

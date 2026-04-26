@@ -18,6 +18,7 @@ jobs:
     secrets: inherit
     with:
       jobName: Verify (check · build · boundaries)
+      enableRemoteCache: true
       turboTeam: ${{ vars.TURBO_TEAM }}
       turboApi: ${{ vars.TURBO_API }}
       timeoutMinutes: 30

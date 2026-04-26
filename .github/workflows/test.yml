@@ -43,8 +43,6 @@ jobs:
     secrets: inherit
     with:
       jobName: ${{ matrix.name }}
-      turboTeam: ${{ vars.TURBO_TEAM }}
-      turboApi: ${{ vars.TURBO_API }}
       timeoutMinutes: 30
       command: ${{ matrix.command }}
       uploadArtifacts: ${{ matrix.upload_artifacts }}

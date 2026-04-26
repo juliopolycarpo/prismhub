@@ -21,6 +21,11 @@ on:
         required: false
         default: ''
         type: string
+      enableRemoteCache:
+        description: Enable Turborepo remote caching for this job.
+        required: false
+        default: false
+        type: boolean
       timeoutMinutes:
         description: Job timeout in minutes.
         required: false
@@ -59,9 +64,9 @@ jobs:
       - name: Run command
         shell: bash
         env:
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          TURBO_TEAM: ${{ inputs.turboTeam }}
-          TURBO_API: ${{ inputs.turboApi }}
+          TURBO_TOKEN: ${{ inputs.enableRemoteCache && secrets.TURBO_TOKEN || '' }}
+          TURBO_TEAM: ${{ inputs.enableRemoteCache && inputs.turboTeam || '' }}
+          TURBO_API: ${{ inputs.enableRemoteCache && inputs.turboApi || '' }}
         run: ${{ inputs.command }}
 
       - name: Upload test artifacts
