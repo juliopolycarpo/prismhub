@@ -54,11 +54,7 @@ export function turboRunTestCommand(
   task: TurboTestTask,
   turboConcurrency: string | undefined,
 ): readonly string[] {
-  return turboRunCommand(
-    task,
-    [],
-    turboConcurrency ? [`--concurrency=${turboConcurrency}`] : [],
-  );
+  return turboRunCommand(task, [], turboConcurrency ? [`--concurrency=${turboConcurrency}`] : []);
 }
 
 interface RunContext {

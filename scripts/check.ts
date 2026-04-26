@@ -65,9 +65,7 @@ function renderOutputSection(
 ): void {
   if (groupsEnabled) {
     for (const e of entries) {
-      process.stdout.write(
-        `${renderGitHubGroup(`${e.name} (${e.annotation})`, e.output, true)}\n`,
-      );
+      process.stdout.write(`${renderGitHubGroup(`${e.name} (${e.annotation})`, e.output, true)}\n`);
     }
   } else {
     process.stdout.write(fallback());
