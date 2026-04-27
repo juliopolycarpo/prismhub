@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Prismhub repository
+    url: https://github.com/juliopolycarpo/prismhub
+    about: Visit the main repository for documentation and source code.
