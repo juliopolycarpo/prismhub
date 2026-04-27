@@ -75,15 +75,20 @@ export function requestAppApi(app: AppApi, path: string, init?: RequestInit): Pr
   return app.handle(new Request(`http://local${path}`, init));
 }
 
-export interface SignedInTestUser {
-  readonly cookie: string;
-  readonly headers: Record<string, string>;
-  readonly role: string;
-}
-
-interface SignUpBody {
-  readonly token: string;
-  readonly user: { readonly id: string; readonly email: string; readonly role?: string };
+/**
+ * Builds a JSON request init for app-api integration tests.
+ *
+ * Example: `jsonInit('PATCH', { themeMode: 'dark' })`
+ */
+export function jsonInit(method: NonNullable<RequestInit['method']>, body?: unknown): RequestInit {
+  const init: RequestInit = {
+    method,
+    headers: { 'content-type': 'application/json' },
+  };
+  if (body !== undefined) {
+    init.body = JSON.stringify(body);
+  }
+  return init;
 }
 
 /**
@@ -94,7 +99,7 @@ interface SignUpBody {
 export async function bootstrapAdminAndSignIn(
   services: Pick<AppApiTestServices, 'auth'>,
   options: { readonly email?: string; readonly password?: string } = {},
-): Promise<SignedInTestUser> {
+): Promise<string> {
   const email = options.email ?? 'admin@prismhub.test';
   const password = options.password ?? 'admin-test-password';
   const res = await services.auth.api.signUpEmail({
@@ -107,12 +112,7 @@ export async function bootstrapAdminAndSignIn(
   const setCookie = res.headers.get('set-cookie') ?? '';
   const cookie = setCookie.split(';')[0] ?? '';
   if (!cookie) throw new Error('missing set-cookie on sign-up response');
-  const body = (await res.json()) as SignUpBody;
-  return {
-    cookie,
-    headers: { cookie },
-    role: body.user.role ?? 'admin',
-  };
+  return cookie;
 }
 
 export interface AuthedAppApiClient {
@@ -134,7 +134,7 @@ export async function createAuthedAppApiClient(
 ): Promise<AuthedAppApiClient> {
   const services = await createAppApiTestServices(options);
   const appApi = createTestAppApi(services);
-  const { cookie } = await bootstrapAdminAndSignIn(services);
+  const cookie = await bootstrapAdminAndSignIn(services);
 
   return {
     services,

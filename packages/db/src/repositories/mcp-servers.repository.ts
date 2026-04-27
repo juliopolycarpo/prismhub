@@ -1,4 +1,5 @@
 import type { Selectable, Updateable } from 'kysely';
+import type { McpTransportKind } from '@prismhub/contracts';
 import type { PrismDatabase } from '../client.ts';
 import type { McpServersTable } from '../schema.types.ts';
 import { parseJsonStringArray, parseJsonStringRecord } from '../json-utils.ts';
@@ -8,7 +9,7 @@ export interface McpServerRow {
   readonly id: string;
   readonly name: string;
   readonly description: string | null;
-  readonly transport: 'stdio' | 'http';
+  readonly transport: McpTransportKind;
   readonly command: string | null;
   readonly args: readonly string[] | null;
   readonly url: string | null;
@@ -18,7 +19,7 @@ export interface McpServerRow {
   readonly updatedAt: string;
 }
 
-function parseTransport(value: string, serverId: string): McpServerRow['transport'] {
+function parseTransport(value: string, serverId: string): McpTransportKind {
   if (value === 'stdio' || value === 'http') return value;
   throw new Error(
     `mcp_servers.transport has unsupported value ${JSON.stringify(value)} for id=${serverId}; expected stdio or http`,
@@ -45,7 +46,7 @@ export interface InsertMcpServer {
   readonly id: string;
   readonly name: string;
   readonly description: string | null;
-  readonly transport: 'stdio' | 'http';
+  readonly transport: McpTransportKind;
   readonly command: string | null;
   readonly args: readonly string[] | null;
   readonly url: string | null;
