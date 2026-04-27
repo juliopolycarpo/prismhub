@@ -1,5 +1,5 @@
 import { McpToolConfigurationCard } from '../components/mcps/mcp-tool-configuration-card.tsx';
-import { Toggle } from '../components/ui.tsx';
+import { Toggle } from '../components/ui';
 import { cn } from '../lib/cn.ts';
 import type { RouterTool } from './local-mcp-server.data.ts';
 

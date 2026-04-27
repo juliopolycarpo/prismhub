@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { AddMcpServerModal } from '../components/mcps/add-mcp-server-modal.tsx';
 import { McpServerCard } from '../components/mcps/mcp-server-card.tsx';
 import { QueryView } from '../components/query-view.tsx';
-import { Button } from '../components/ui.tsx';
+import { Button } from '../components/ui';
 import { mcpServersQueryOptions, updateMcpServer } from '../lib/app-queries.ts';
 import { mcpColorAt } from '../lib/colors.ts';
 import { getErrorMessage } from '../lib/error.ts';

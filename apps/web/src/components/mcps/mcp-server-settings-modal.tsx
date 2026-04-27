@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { mcpServerToolsQueryOptions } from '../../lib/app-queries.ts';
 import { getErrorMessage } from '../../lib/error.ts';
 import { AppModal } from '../app-modal.tsx';
-import { Button } from '../ui.tsx';
+import { Button } from '../ui';
 import { McpToolConfigurationCard } from './mcp-tool-configuration-card.tsx';
 
 interface McpServerSettingsModalProps {

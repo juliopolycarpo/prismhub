@@ -6,7 +6,7 @@ import { registerMcpServer } from '../../lib/app-queries.ts';
 import { getErrorMessage } from '../../lib/error.ts';
 import { firstFormError } from '../../lib/auth/form-errors.ts';
 import { AppModal } from '../app-modal.tsx';
-import { Button } from '../ui.tsx';
+import { Button } from '../ui';
 import {
   Field,
   HttpFields,

@@ -2,7 +2,7 @@ import type { CacheEntry } from '@prismhub/contracts';
 import { useQuery } from '@tanstack/react-query';
 import { Download } from 'lucide-react';
 import { QueryView } from '../components/query-view.tsx';
-import { Badge, Button, Card, StatCard } from '../components/ui.tsx';
+import { Badge, Button, Card, StatCard } from '../components/ui';
 import {
   cacheEntriesQueryOptions,
   cacheStatsQueryOptions,

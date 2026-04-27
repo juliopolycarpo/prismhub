@@ -4,7 +4,7 @@ import { RouterProvider, createMemoryHistory } from '@tanstack/react-router';
 import { cleanup, waitFor, within } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, mock, test } from 'bun:test';
 import { setupServer } from 'msw/node';
-import { handlers } from '../../lib/msw-handlers.ts';
+import { handlers } from '../../test-utils/msw-handlers.ts';
 import { createAppQueryClient } from '../../lib/query-client.ts';
 
 type SessionResult = Promise<{

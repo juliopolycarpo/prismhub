@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { afterAll, afterEach, beforeAll, describe, expect, test } from 'bun:test';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { handlers } from '../../lib/msw-handlers.ts';
+import { handlers } from '../../test-utils/msw-handlers.ts';
 import { renderWithQueryClient } from '../../test-utils.tsx';
 import { SettingsPage } from '../settings.tsx';
 

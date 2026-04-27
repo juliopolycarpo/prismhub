@@ -1,0 +1,97 @@
+name: Bug report
+description: Report a bug in Prismhub
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to file a bug report. Please fill out the sections below so we can reproduce and fix it quickly.
+
+  - type: input
+    id: bun-version
+    attributes:
+      label: Bun version
+      description: Run `bun --version` and paste the output.
+      placeholder: '1.3.13'
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      description: Which OS and version are you on?
+      placeholder: 'Ubuntu 24.04 (WSL2), macOS 15.2, etc.'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected package(s)
+      description: Which workspace(s) does this bug affect?
+      multiple: true
+      options:
+        - apps/runtime
+        - apps/web
+        - packages/app-api
+        - packages/auth
+        - packages/config
+        - packages/contracts
+        - packages/core
+        - packages/db
+        - packages/http-server
+        - packages/mcp-client
+        - packages/mcp-core
+        - packages/mcp-host
+        - packages/observability
+        - packages/testkit
+        - packages/testkit-base
+        - packages/web-assets
+        - packages/integration-tests
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: A clear, concise description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Step-by-step instructions so we can reproduce the issue.
+      placeholder: |
+        1. Run `bun run dev`
+        2. Open `http://127.0.0.1:3030/dashboard`
+        3. Click on ...
+        4. Observe the error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste any relevant error messages, stack traces, or terminal output.
+      render: shell

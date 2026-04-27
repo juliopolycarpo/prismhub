@@ -91,9 +91,21 @@ For a detailed breakdown of the system architecture and layer dependency rules, 
 
 All packages are at `0.x.y` during pre-release development. Versions are not independently published until the first public release.
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for the version history.
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for branch conventions, commit format, testing policy, and the PR checklist.
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for how to report vulnerabilities.
+
+## Code of Conduct
+
+See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) for community guidelines.
 
 ## License
 

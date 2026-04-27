@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Card } from './ui.tsx';
+import { Card } from './ui';
 
 export function SettingsSection({
   title,

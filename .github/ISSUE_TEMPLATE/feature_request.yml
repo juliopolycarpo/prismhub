@@ -1,0 +1,61 @@
+name: Feature request
+description: Propose a new feature or enhancement for Prismhub
+labels: [enhancement, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing your idea. The more context you provide, the easier it is for us to evaluate and prioritize.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem does this feature solve? Describe the use case or pain point.
+      placeholder: "I'm frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe how you'd like it to work. Be as specific as you can.
+      placeholder: 'A new command / setting / UI element that...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches or workarounds have you tried?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected package(s)
+      description: Which workspace(s) would this feature touch?
+      multiple: true
+      options:
+        - apps/runtime
+        - apps/web
+        - packages/app-api
+        - packages/auth
+        - packages/config
+        - packages/contracts
+        - packages/core
+        - packages/db
+        - packages/http-server
+        - packages/mcp-client
+        - packages/mcp-core
+        - packages/mcp-host
+        - packages/observability
+        - packages/testkit
+        - packages/testkit-base
+        - packages/web-assets
+        - packages/integration-tests
+    validations:
+      required: false

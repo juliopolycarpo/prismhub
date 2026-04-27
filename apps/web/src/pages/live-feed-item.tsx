@@ -1,6 +1,6 @@
 import type { FeedEnvelope, SessionEventPayload } from '@prismhub/contracts';
 import { Sparkles, Zap } from 'lucide-react';
-import { Card } from '../components/ui.tsx';
+import { Card } from '../components/ui';
 
 export function FeedItem({ envelope }: { readonly envelope: FeedEnvelope }) {
   const event = envelope.event;
