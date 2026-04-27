@@ -21,7 +21,7 @@ body:
     attributes:
       label: Proposed solution
       description: Describe how you'd like it to work. Be as specific as you can.
-      placeholder: "A new command / setting / UI element that..."
+      placeholder: 'A new command / setting / UI element that...'
     validations:
       required: true
 

@@ -39,12 +39,12 @@ The following packages are within the security boundary:
 
 ## Response Timeline
 
-| Severity   | Initial response | Patch target     |
-| ---------- | ---------------- | ---------------- |
-| Critical   | 48 hours         | 7 days           |
-| High       | 72 hours         | 14 days          |
-| Medium     | 5 business days  | Next release     |
-| Low        | Best effort      | Next release     |
+| Severity | Initial response | Patch target |
+| -------- | ---------------- | ------------ |
+| Critical | 48 hours         | 7 days       |
+| High     | 72 hours         | 14 days      |
+| Medium   | 5 business days  | Next release |
+| Low      | Best effort      | Next release |
 
 These timelines apply once the report is acknowledged. We may extend them for
 complex issues and will communicate delays proactively.
@@ -57,8 +57,8 @@ complex issues and will communicate delays proactively.
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
+| Version | Supported                        |
+| ------- | -------------------------------- |
 | 0.x     | :white_check_mark: (pre-release) |
 
 During the pre-release phase (0.x.y), all versions are supported for security

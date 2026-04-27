@@ -12,7 +12,7 @@ body:
     attributes:
       label: Bun version
       description: Run `bun --version` and paste the output.
-      placeholder: "1.3.13"
+      placeholder: '1.3.13'
     validations:
       required: true
 
@@ -21,7 +21,7 @@ body:
     attributes:
       label: Operating system
       description: Which OS and version are you on?
-      placeholder: "Ubuntu 24.04 (WSL2), macOS 15.2, etc."
+      placeholder: 'Ubuntu 24.04 (WSL2), macOS 15.2, etc.'
     validations:
       required: true
 
