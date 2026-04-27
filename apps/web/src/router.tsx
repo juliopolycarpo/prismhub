@@ -21,7 +21,7 @@ import { CachePage } from './pages/cache.tsx';
 import { HistoryPage } from './pages/history.tsx';
 import { LocalMcpServerPage } from './pages/local-mcp-server.tsx';
 import { routerToolsQueryOptions } from './pages/local-mcp-server.data.ts';
-import { LivePage } from './pages/live.tsx';
+import { LivePage } from './pages/live/index.tsx';
 import { LoginPage } from './pages/login.tsx';
 import { McpsPage } from './pages/mcps.tsx';
 import { SettingsPage } from './pages/settings.tsx';
