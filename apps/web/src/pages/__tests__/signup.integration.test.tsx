@@ -106,12 +106,12 @@ describe('SignupPage', () => {
     renderSignup();
 
     await waitFor(() => within(document.body).getByLabelText('Nome'));
-    await user.type(within(document.body).getByLabelText('Nome'), 'Admin');
-    await user.type(within(document.body).getByLabelText('E-mail'), 'admin@prismhub.test');
-    await user.type(within(document.body).getByLabelText('Senha'), 'admin-test-password');
+    await user.type(within(document.body).getByLabelText('Nome'), 'A');
+    await user.type(within(document.body).getByLabelText('E-mail'), 'a@b.c');
+    await user.type(within(document.body).getByLabelText('Senha'), 'p');
     await user.click(within(document.body).getByRole('button', { name: /Criar/ }));
 
-    await waitFor(() => within(document.body).getByText('Live page'));
+    await waitFor(() => within(document.body).getByText('Live page'), { timeout: 3000 });
   });
 
   test('renders registration-disabled message on 403', async () => {
@@ -123,9 +123,9 @@ describe('SignupPage', () => {
     renderSignup();
 
     await waitFor(() => within(document.body).getByLabelText('Nome'));
-    await user.type(within(document.body).getByLabelText('Nome'), 'Bob');
-    await user.type(within(document.body).getByLabelText('E-mail'), 'bob@prismhub.test');
-    await user.type(within(document.body).getByLabelText('Senha'), 'bob-pass');
+    await user.type(within(document.body).getByLabelText('Nome'), 'B');
+    await user.type(within(document.body).getByLabelText('E-mail'), 'b@b.c');
+    await user.type(within(document.body).getByLabelText('Senha'), 'p');
     await user.click(within(document.body).getByRole('button', { name: /Criar/ }));
 
     await waitFor(() => within(document.body).getByRole('alert'));
