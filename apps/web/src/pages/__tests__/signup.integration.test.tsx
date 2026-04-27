@@ -29,7 +29,7 @@ await mock.module('../../lib/auth-client.ts', () => ({
 }));
 
 const { SignupPage } = await import('../signup.tsx');
-const { AuthProvider } = await import('../../lib/auth-context.tsx');
+const { AuthProvider } = await import('../../lib/auth/auth-context.tsx');
 
 const mswServer = setupServer(...handlers);
 

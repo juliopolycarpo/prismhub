@@ -93,6 +93,6 @@ describe('rowToDomain transport parsing', () => {
       .where('id', '=', BASE_SERVER.id)
       .execute();
 
-    await expect(getMcpServerByIdOrThrow(db, BASE_SERVER.id)).rejects.toThrow(/sse/);
+    return expect(getMcpServerByIdOrThrow(db, BASE_SERVER.id)).rejects.toThrow(/sse/);
   });
 });

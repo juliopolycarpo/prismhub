@@ -3,9 +3,9 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import type { FormEvent } from 'react';
 import { AuthAlert, AuthCard, AuthShell, AuthSubmitButton } from '../components/auth-form.tsx';
 import { FormField } from '../components/ui.tsx';
-import { authClient } from '../lib/auth-client.ts';
+import { authClient } from '../lib/auth/auth-client.ts';
 import type { AuthenticatedPath } from '../lib/dashboard-paths.ts';
-import { firstFormError, requiredText } from '../lib/form-errors.ts';
+import { firstFormError, requiredText } from '../lib/auth/form-errors.ts';
 
 interface LoginFormValues {
   readonly email: string;

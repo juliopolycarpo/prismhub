@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { createMcpRegistryService } from './mcp-registry-service.ts';
-import { createCoreTestServices, type CoreTestServices } from '../__tests__/test-services.ts';
+import { createCoreTestServices, type CoreTestServices } from '../testing/test-services.ts';
 
 let services: CoreTestServices;
 

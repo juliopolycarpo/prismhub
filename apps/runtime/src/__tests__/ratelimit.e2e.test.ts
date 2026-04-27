@@ -6,7 +6,7 @@ import {
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
-} from './runtime-server.ts';
+} from '../testing/runtime-server.ts';
 
 const ADMIN = { email: 'admin@prismhub.test', password: 'admin-ratelimit-test-1' };
 

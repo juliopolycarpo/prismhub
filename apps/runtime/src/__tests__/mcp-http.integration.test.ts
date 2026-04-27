@@ -5,7 +5,7 @@ import {
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
-} from './runtime-server.ts';
+} from '../testing/runtime-server.ts';
 
 const INIT_REQUEST = {
   jsonrpc: '2.0',

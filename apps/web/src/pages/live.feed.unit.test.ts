@@ -1,6 +1,6 @@
 import type { FeedEnvelope } from '@prismhub/contracts';
 import { describe, expect, test } from 'bun:test';
-import { parseFeedEnvelope } from './feed.ts';
+import { parseFeedEnvelope } from './live.feed.ts';
 
 describe('parseFeedEnvelope', () => {
   test('returns a feed envelope when SSE data contains the envelope shape', () => {

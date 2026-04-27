@@ -122,7 +122,14 @@ export const exceptionConfig = [
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.e2e.test.ts', '**/testkit/**'],
+    files: [
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.e2e.test.ts',
+      '**/testkit/**',
+      '**/testing/**',
+      '**/test-*.{ts,tsx}',
+    ],
     rules: {
       'max-lines-per-function': 'off',
       'max-lines': 'off',

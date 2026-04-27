@@ -14,7 +14,7 @@ import { Link, Outlet, useMatchRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import type { AuthenticatedPath } from '../lib/dashboard-paths.ts';
 import { mcpServersQueryOptions } from '../lib/app-queries.ts';
-import { useAuth } from '../lib/use-auth.ts';
+import { useAuth } from '../lib/auth/use-auth.ts';
 import { cn } from '../lib/cn.ts';
 import { mcpColorAt } from '../lib/colors.ts';
 

@@ -6,7 +6,7 @@ import {
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
-} from './runtime-server.ts';
+} from '../testing/runtime-server.ts';
 
 let runtime: RuntimeServerHandle;
 let adminCookie: string;

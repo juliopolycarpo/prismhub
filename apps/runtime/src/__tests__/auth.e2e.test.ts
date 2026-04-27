@@ -6,7 +6,7 @@ import {
   shutdownRuntimeServer,
   startRuntimeServer,
   type RuntimeServerHandle,
-} from './runtime-server.ts';
+} from '../testing/runtime-server.ts';
 
 const REPO_ROOT = resolve(import.meta.dir, '../../../..');
 const RUN_TIMESTAMP = new Date().toISOString().replace(/[:.]/g, '-').replace(/Z$/, '');

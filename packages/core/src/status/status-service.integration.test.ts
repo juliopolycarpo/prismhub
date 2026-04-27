@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { frozenClock } from '@prismhub/testkit-base';
-import { createCoreTestServices, type CoreTestServices } from '../__tests__/test-services.ts';
+import { createCoreTestServices, type CoreTestServices } from '../testing/test-services.ts';
 
 describe('StatusService.snapshot()', () => {
   let services: CoreTestServices;

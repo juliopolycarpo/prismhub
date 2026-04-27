@@ -29,7 +29,7 @@ await mock.module('../../lib/auth-client.ts', () => ({
 }));
 
 const { createAppRouter } = await import('../../router.tsx');
-const { AuthProvider } = await import('../../lib/auth-context.tsx');
+const { AuthProvider } = await import('../../lib/auth/auth-context.tsx');
 const { render } = await import('@testing-library/react');
 
 const mswServer = setupServer(...handlers);
