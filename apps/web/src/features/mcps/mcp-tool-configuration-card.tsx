@@ -1,7 +1,7 @@
 import type { McpToolSummary } from '@prismhub/contracts';
 import { useState, type ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
-import { Badge, SegmentedControl, type SegmentedControlOption } from '../ui';
+import { Badge, SegmentedControl, type SegmentedControlOption } from '../../components/ui';
 import { ParameterControl } from './mcp-tool-parameter-fields.tsx';
 import { parseToolParameters, type ParsedParameter } from './tool-parameters.ts';
 
