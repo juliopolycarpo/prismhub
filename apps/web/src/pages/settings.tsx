@@ -1,7 +1,7 @@
 import type { SettingsRecord, ThemeMode, UpdateSettingsInput } from '@prismhub/contracts';
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { SettingsRow, SettingsSection } from '../components/settings-panels.tsx';
-import { SegmentedControl, Toggle, type SegmentedControlOption } from '../components/ui.tsx';
+import { SegmentedControl, Toggle, type SegmentedControlOption } from '../components/ui';
 import { settingsQueryOptions, updateSettings } from '../lib/app-queries.ts';
 import { getErrorMessage } from '../lib/error.ts';
 import { queryKeys } from '../lib/query-keys.ts';

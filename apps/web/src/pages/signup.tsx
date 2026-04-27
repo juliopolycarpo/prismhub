@@ -9,7 +9,7 @@ import {
   AuthShell,
   AuthSubmitButton,
 } from '../components/auth-form.tsx';
-import { FormField } from '../components/ui.tsx';
+import { FormField } from '../components/ui';
 import { authClient } from '../lib/auth/auth-client.ts';
 import { registrationStatusQueryOptions } from '../lib/app-queries.ts';
 import { hasErrorCode } from '../lib/error.ts';

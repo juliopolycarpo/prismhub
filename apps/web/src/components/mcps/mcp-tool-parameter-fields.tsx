@@ -1,5 +1,5 @@
 import { useState, type ComponentType } from 'react';
-import { Toggle } from '../ui.tsx';
+import { Toggle } from '../ui';
 import { ArrayTokenInput } from './array-token-input.tsx';
 import type { ParsedParameter } from './tool-parameters.ts';
 

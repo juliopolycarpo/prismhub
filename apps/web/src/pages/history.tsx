@@ -2,7 +2,7 @@ import { Download, Filter, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { QueryView } from '../components/query-view.tsx';
-import { Button, Card } from '../components/ui.tsx';
+import { Button, Card } from '../components/ui';
 import { sessionsQueryOptions, type SessionRow } from '../lib/app-queries.ts';
 
 const EMPTY_SESSIONS: readonly SessionRow[] = [];

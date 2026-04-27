@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Server } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { SettingsRow, SettingsSection } from '../components/settings-panels.tsx';
-import { Badge } from '../components/ui.tsx';
+import { Badge } from '../components/ui';
 import { cn } from '../lib/cn.ts';
 import {
   getLocalMcpEndpoint,

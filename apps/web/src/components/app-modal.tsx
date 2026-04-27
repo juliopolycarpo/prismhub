@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '../lib/cn.ts';
-import { Button, Card } from './ui.tsx';
+import { Button, Card } from './ui';
 
 type ModalSize = 'md' | 'lg';
 
