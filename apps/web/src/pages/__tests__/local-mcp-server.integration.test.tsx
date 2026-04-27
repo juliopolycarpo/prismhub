@@ -6,7 +6,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import { handlers } from '../../test-utils/msw-handlers.ts';
 import { renderWithQueryClient } from '../../test-utils.tsx';
-import { LocalMcpServerPage } from '../local-mcp-server.tsx';
+import { LocalMcpServerPage } from '../local-mcp-server/index.tsx';
 
 const mswServer = setupServer(...handlers);
 beforeAll(() => mswServer.listen({ onUnhandledRequest: 'warn' }));

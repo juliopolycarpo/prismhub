@@ -1,7 +1,7 @@
 import type { McpServerRecord, McpToolSummary } from '@prismhub/contracts';
 import { queryOptions } from '@tanstack/react-query';
-import { api } from '../lib/api.ts';
-import { queryKeys } from '../lib/query-keys.ts';
+import { api } from '../../lib/api.ts';
+import { queryKeys } from '../../lib/query-keys.ts';
 
 export interface RouterTool {
   readonly server: McpServerRecord;

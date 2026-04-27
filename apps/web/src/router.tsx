@@ -19,8 +19,8 @@ import {
 } from './lib/app-queries.ts';
 import { CachePage } from './pages/cache.tsx';
 import { HistoryPage } from './pages/history.tsx';
-import { LocalMcpServerPage } from './pages/local-mcp-server.tsx';
-import { routerToolsQueryOptions } from './pages/local-mcp-server.data.ts';
+import { LocalMcpServerPage } from './pages/local-mcp-server/index.tsx';
+import { routerToolsQueryOptions } from './pages/local-mcp-server/data.ts';
 import { LivePage } from './pages/live/index.tsx';
 import { LoginPage } from './pages/login.tsx';
 import { McpsPage } from './pages/mcps.tsx';
