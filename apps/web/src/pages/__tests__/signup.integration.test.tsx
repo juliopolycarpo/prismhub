@@ -19,7 +19,7 @@ const signUpMock = mock<
   () => Promise<{ error?: { message?: string; status?: number; code?: string } }>
 >(async () => ({}));
 
-await mock.module('../../lib/auth-client.ts', () => ({
+await mock.module('../../lib/auth/auth-client.ts', () => ({
   authClient: {
     getSession: async () => ({ data: null, error: null }),
     signUp: { email: signUpMock },

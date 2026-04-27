@@ -20,7 +20,7 @@ interface SessionHookResult {
 const getSessionMock = mock<() => SessionResult>(async () => ({ data: null, error: null }));
 const useSessionMock = mock<() => SessionHookResult>(() => ({ data: null, isPending: false }));
 
-await mock.module('../../lib/auth-client.ts', () => ({
+await mock.module('../../lib/auth/auth-client.ts', () => ({
   authClient: {
     getSession: getSessionMock,
     signOut: async () => undefined,
