@@ -1,7 +1,7 @@
-import '../../../test-setup.ts';
+import '../../test-setup.ts';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, test } from 'bun:test';
-import { QueryView, type QueryViewQueryShape } from '../query-view.tsx';
+import { QueryView, type QueryViewQueryShape } from './query-view.tsx';
 
 afterEach(() => cleanup());
 

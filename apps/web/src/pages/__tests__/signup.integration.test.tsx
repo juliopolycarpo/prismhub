@@ -12,7 +12,7 @@ import {
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { handlers } from '../../lib/msw-handlers.ts';
+import { handlers } from '../../test-utils/msw-handlers.ts';
 import { renderWithQueryClient } from '../../test-utils.tsx';
 
 const signUpMock = mock<
