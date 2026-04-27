@@ -36,12 +36,12 @@ export function SegmentedControl<TValue extends string>({
   );
 }
 
-function SegmentedControlButton<TValue extends string>({
+function SegmentedControlButton({
   option,
   selected,
   onSelect,
 }: {
-  readonly option: SegmentedControlOption<TValue>;
+  readonly option: SegmentedControlOption<string>;
   readonly selected: boolean;
   readonly onSelect: () => void;
 }) {

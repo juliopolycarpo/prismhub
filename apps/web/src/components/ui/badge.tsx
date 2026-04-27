@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { cn } from '../../lib/cn.ts';
 
-type BadgeVariant = 'default' | 'success' | 'warning';
+export type BadgeVariant = 'default' | 'success' | 'warning';
 
 const BADGE_VARIANT: Record<BadgeVariant, string> = {
   default: 'border-stone-800 text-stone-300 bg-stone-800/30',

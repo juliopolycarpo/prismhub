@@ -1,5 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
+const MOCK_USER = { id: 'user_mock', email: 'admin@prismhub.test', name: 'Admin', role: 'admin' };
+
 export const handlers = [
   http.get('*/api/v1/registration-status', () =>
     HttpResponse.json({ firstUser: false, registrationOpen: true }),
@@ -11,25 +13,14 @@ export const handlers = [
         userId: 'user_mock',
         expiresAt: new Date(Date.now() + 86_400_000).toISOString(),
       },
-      user: {
-        id: 'user_mock',
-        email: 'admin@prismhub.test',
-        name: 'Admin',
-        role: 'admin',
-      },
+      user: MOCK_USER,
     }),
   ),
   http.post('*/api/auth/sign-in/email', () =>
-    HttpResponse.json({
-      token: 'mock-token',
-      user: { id: 'user_mock', email: 'admin@prismhub.test', name: 'Admin', role: 'admin' },
-    }),
+    HttpResponse.json({ token: 'mock-token', user: MOCK_USER }),
   ),
   http.post('*/api/auth/sign-up/email', () =>
-    HttpResponse.json({
-      token: 'mock-token',
-      user: { id: 'user_mock', email: 'admin@prismhub.test', name: 'Admin', role: 'admin' },
-    }),
+    HttpResponse.json({ token: 'mock-token', user: MOCK_USER }),
   ),
   http.post('*/api/auth/sign-out', () => HttpResponse.json({ success: true })),
   http.get('*/api/app/status', () =>
