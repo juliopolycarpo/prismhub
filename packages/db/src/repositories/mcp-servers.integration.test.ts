@@ -82,3 +82,17 @@ describe('updateMcpServer()', () => {
     expect(after.updatedAt >= before.updatedAt).toBe(true);
   });
 });
+
+describe('rowToDomain transport parsing', () => {
+  test('throws on unsupported transport value rather than silently coercing', async () => {
+    await insertMcpServer(db, BASE_SERVER);
+    // Simulate a future migration / data corruption introducing a new transport.
+    await db
+      .updateTable('mcp_servers')
+      .set({ transport: 'sse' })
+      .where('id', '=', BASE_SERVER.id)
+      .execute();
+
+    return expect(getMcpServerByIdOrThrow(db, BASE_SERVER.id)).rejects.toThrow(/sse/);
+  });
+});

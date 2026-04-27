@@ -1,9 +1,9 @@
 import { Download, Filter, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import { QueryView } from '../components/query-view.tsx';
 import { Button, Card } from '../components/ui.tsx';
 import { sessionsQueryOptions, type SessionRow } from '../lib/app-queries.ts';
-import { getErrorMessage } from '../lib/error.ts';
 
 const EMPTY_SESSIONS: readonly SessionRow[] = [];
 
@@ -43,28 +43,27 @@ export function HistoryPage() {
       </header>
 
       <div className="flex-1 overflow-y-auto px-8 pb-8 space-y-8">
-        {sessions.isLoading ? (
-          <p className="text-sm text-stone-500">Carregando…</p>
-        ) : sessions.isError ? (
-          <p className="text-sm text-red-400">
-            {getErrorMessage(sessions.error, 'Falha ao carregar sessões.')}
-          </p>
-        ) : groups.length === 0 ? (
-          <p className="text-sm text-stone-500">Nenhuma sessão gravada ainda.</p>
-        ) : (
-          groups.map((group) => (
-            <section key={group.label}>
-              <h2 className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">
-                {group.label}
-              </h2>
-              <div className="space-y-2">
-                {group.rows.map((session) => (
-                  <SessionCard key={session.id} session={session} />
-                ))}
-              </div>
-            </section>
-          ))
-        )}
+        <QueryView
+          query={sessions}
+          errorFallback="Falha ao carregar sessões."
+          emptyMessage="Nenhuma sessão gravada ainda."
+          isEmpty={() => groups.length === 0}
+        >
+          {() =>
+            groups.map((group) => (
+              <section key={group.label}>
+                <h2 className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-3">
+                  {group.label}
+                </h2>
+                <div className="space-y-2">
+                  {group.rows.map((session) => (
+                    <SessionCard key={session.id} session={session} />
+                  ))}
+                </div>
+              </section>
+            ))
+          }
+        </QueryView>
       </div>
     </div>
   );

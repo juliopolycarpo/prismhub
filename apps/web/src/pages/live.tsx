@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Activity, ArrowRight, Download, Pause } from 'lucide-react';
 import { Badge, Button, Card, StatCard } from '../components/ui.tsx';
 import { summaryQueryOptions, type LiveSummary } from '../lib/app-queries.ts';
-import { useFeed, type FeedStatus } from '../lib/feed.ts';
+import { useFeed, type FeedStatus } from './live.feed.ts';
 import { cn } from '../lib/cn.ts';
 import { LiveFeedVirtualList } from './live-feed-virtual-list.tsx';
 

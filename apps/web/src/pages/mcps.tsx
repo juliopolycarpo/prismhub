@@ -4,13 +4,12 @@ import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { AddMcpServerModal } from '../components/mcps/add-mcp-server-modal.tsx';
 import { McpServerCard } from '../components/mcps/mcp-server-card.tsx';
+import { QueryView } from '../components/query-view.tsx';
 import { Button } from '../components/ui.tsx';
 import { mcpServersQueryOptions, updateMcpServer } from '../lib/app-queries.ts';
 import { mcpColorAt } from '../lib/colors.ts';
 import { getErrorMessage } from '../lib/error.ts';
 import { queryKeys } from '../lib/query-keys.ts';
-
-const EMPTY_MCP_SERVERS: readonly McpServerRecord[] = [];
 
 export function McpsPage() {
   const queryClient = useQueryClient();
@@ -24,7 +23,6 @@ export function McpsPage() {
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const servers = serversQuery.data ?? EMPTY_MCP_SERVERS;
 
   async function toggleEnabled(id: string, enabled: boolean) {
     try {
@@ -49,28 +47,26 @@ export function McpsPage() {
       </header>
 
       <div className="flex-1 overflow-y-auto px-8 pb-8">
-        {serversQuery.isLoading ? (
-          <p className="text-sm text-stone-500">Carregando servidores MCP…</p>
-        ) : serversQuery.isError ? (
-          <p className="text-sm text-red-400">
-            {getErrorMessage(serversQuery.error, 'Falha ao carregar servidores MCP.')}
-          </p>
-        ) : servers.length === 0 ? (
-          <p className="text-sm text-stone-500">
-            Nenhum servidor MCP registrado. Clique em "Adicionar Servidor MCP" para começar.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {servers.map((mcp, i) => (
-              <McpServerCard
-                key={mcp.id}
-                mcp={mcp}
-                color={mcpColorAt(i)}
-                onToggle={(enabled) => void toggleEnabled(mcp.id, enabled)}
-              />
-            ))}
-          </div>
-        )}
+        <QueryView
+          query={serversQuery}
+          loadingMessage="Carregando servidores MCP…"
+          errorFallback="Falha ao carregar servidores MCP."
+          emptyMessage='Nenhum servidor MCP registrado. Clique em "Adicionar Servidor MCP" para começar.'
+          isEmpty={(servers) => servers.length === 0}
+        >
+          {(servers) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {servers.map((mcp, i) => (
+                <McpServerCard
+                  key={mcp.id}
+                  mcp={mcp}
+                  color={mcpColorAt(i)}
+                  onToggle={(enabled) => void toggleEnabled(mcp.id, enabled)}
+                />
+              ))}
+            </div>
+          )}
+        </QueryView>
       </div>
 
       {modalOpen && (

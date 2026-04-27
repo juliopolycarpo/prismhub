@@ -1,4 +1,5 @@
 import type { ToolRegistry } from '@prismhub/mcp-core';
+import { getErrorMessage } from '@prismhub/observability';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
@@ -42,7 +43,7 @@ export function createPrismMcpServer(options: PrismMcpServerOptions): Server {
         content: [
           {
             type: 'text',
-            text: error instanceof Error ? error.message : String(error),
+            text: getErrorMessage(error),
           },
         ],
         isError: true,

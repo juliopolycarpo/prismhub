@@ -2,7 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { AuthProvider } from './lib/auth-context.tsx';
+import { AuthProvider } from './lib/auth/auth-context.tsx';
 import { appQueryClient } from './lib/query-client.ts';
 import { router } from './router.tsx';
 

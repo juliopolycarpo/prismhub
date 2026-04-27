@@ -1,4 +1,5 @@
-import type { Updateable } from 'kysely';
+import type { Selectable, Updateable } from 'kysely';
+import type { McpTransportKind } from '@prismhub/contracts';
 import type { PrismDatabase } from '../client.ts';
 import type { McpServersTable } from '../schema.types.ts';
 import { parseJsonStringArray, parseJsonStringRecord } from '../json-utils.ts';
@@ -8,7 +9,7 @@ export interface McpServerRow {
   readonly id: string;
   readonly name: string;
   readonly description: string | null;
-  readonly transport: 'stdio' | 'http';
+  readonly transport: McpTransportKind;
   readonly command: string | null;
   readonly args: readonly string[] | null;
   readonly url: string | null;
@@ -18,12 +19,19 @@ export interface McpServerRow {
   readonly updatedAt: string;
 }
 
-function rowToDomain(row: McpServersTable): McpServerRow {
+function parseTransport(value: string, serverId: string): McpTransportKind {
+  if (value === 'stdio' || value === 'http') return value;
+  throw new Error(
+    `mcp_servers.transport has unsupported value ${JSON.stringify(value)} for id=${serverId}; expected stdio or http`,
+  );
+}
+
+function rowToDomain(row: Selectable<McpServersTable>): McpServerRow {
   return {
     id: row.id,
     name: row.name,
     description: row.description,
-    transport: row.transport === 'http' ? 'http' : 'stdio',
+    transport: parseTransport(row.transport, row.id),
     command: row.command,
     args: parseJsonStringArray(row.args_json),
     url: row.url,
@@ -38,7 +46,7 @@ export interface InsertMcpServer {
   readonly id: string;
   readonly name: string;
   readonly description: string | null;
-  readonly transport: 'stdio' | 'http';
+  readonly transport: McpTransportKind;
   readonly command: string | null;
   readonly args: readonly string[] | null;
   readonly url: string | null;
@@ -73,6 +81,14 @@ export async function insertMcpServer(
 export async function listMcpServers(db: PrismDatabase): Promise<readonly McpServerRow[]> {
   const rows = await db.selectFrom('mcp_servers').selectAll().orderBy('created_at').execute();
   return rows.map(rowToDomain);
+}
+
+export async function countMcpServers(db: PrismDatabase): Promise<number> {
+  const row = await db
+    .selectFrom('mcp_servers')
+    .select((eb) => eb.fn.countAll<number>().as('count'))
+    .executeTakeFirstOrThrow();
+  return Number(row.count);
 }
 
 export async function getMcpServerByIdOrThrow(

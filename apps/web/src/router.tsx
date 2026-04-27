@@ -6,7 +6,7 @@ import {
   redirect,
   type RouterHistory,
 } from '@tanstack/react-router';
-import { authClient } from './lib/auth-client.ts';
+import { authClient } from './lib/auth/auth-client.ts';
 import { authenticatedPathOrDefault } from './lib/dashboard-paths.ts';
 import { appQueryClient, createAppQueryClient } from './lib/query-client.ts';
 import {

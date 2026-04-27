@@ -10,10 +10,10 @@ import {
   AuthSubmitButton,
 } from '../components/auth-form.tsx';
 import { FormField } from '../components/ui.tsx';
-import { authClient } from '../lib/auth-client.ts';
+import { authClient } from '../lib/auth/auth-client.ts';
 import { registrationStatusQueryOptions } from '../lib/app-queries.ts';
 import { hasErrorCode } from '../lib/error.ts';
-import { firstFormError, requiredText } from '../lib/form-errors.ts';
+import { firstFormError, requiredText } from '../lib/auth/form-errors.ts';
 
 interface SignupFormValues {
   readonly name: string;

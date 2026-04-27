@@ -19,7 +19,7 @@ const signUpMock = mock<
   () => Promise<{ error?: { message?: string; status?: number; code?: string } }>
 >(async () => ({}));
 
-await mock.module('../../lib/auth-client.ts', () => ({
+await mock.module('../../lib/auth/auth-client.ts', () => ({
   authClient: {
     getSession: async () => ({ data: null, error: null }),
     signUp: { email: signUpMock },
@@ -29,7 +29,7 @@ await mock.module('../../lib/auth-client.ts', () => ({
 }));
 
 const { SignupPage } = await import('../signup.tsx');
-const { AuthProvider } = await import('../../lib/auth-context.tsx');
+const { AuthProvider } = await import('../../lib/auth/auth-context.tsx');
 
 const mswServer = setupServer(...handlers);
 

@@ -17,7 +17,7 @@ const signInMock = mock<() => Promise<{ error?: { message?: string; status?: num
 );
 const LOGIN_SUBMIT_TIMEOUT_MS = 15_000;
 
-await mock.module('../../lib/auth-client.ts', () => ({
+await mock.module('../../lib/auth/auth-client.ts', () => ({
   authClient: {
     getSession: async () => ({ data: null, error: null }),
     signIn: { email: signInMock },
@@ -27,7 +27,7 @@ await mock.module('../../lib/auth-client.ts', () => ({
 }));
 
 const { LoginPage } = await import('../login.tsx');
-const { AuthProvider } = await import('../../lib/auth-context.tsx');
+const { AuthProvider } = await import('../../lib/auth/auth-context.tsx');
 
 beforeEach(() => {
   signInMock.mockImplementation(async () => ({}));

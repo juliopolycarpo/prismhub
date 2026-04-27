@@ -3,6 +3,9 @@ import { IsoDateTimeSchema, UlidSchema } from '../hooks/shared.types.ts';
 
 export const McpTransportKindSchema = Type.Union([Type.Literal('stdio'), Type.Literal('http')]);
 export type McpTransportKind = Static<typeof McpTransportKindSchema>;
+const NullableStringSchema = Type.Union([Type.String(), Type.Null()]);
+const McpServerNameFieldSchema = Type.String({ minLength: 1, maxLength: 120 });
+const McpServerDescriptionFieldSchema = Type.String({ maxLength: 1000 });
 
 /** HTTP request headers attached to every upstream call (e.g. Authorization). */
 export const McpHttpHeadersSchema = Type.Record(Type.String({ minLength: 1 }), Type.String(), {
@@ -12,10 +15,10 @@ export type McpHttpHeaders = Static<typeof McpHttpHeadersSchema>;
 
 export const McpServerRecordSchema = Type.Object({
   id: UlidSchema,
-  name: Type.String({ minLength: 1, maxLength: 120 }),
-  description: Type.Union([Type.String(), Type.Null()]),
+  name: McpServerNameFieldSchema,
+  description: NullableStringSchema,
   transport: McpTransportKindSchema,
-  command: Type.Union([Type.String(), Type.Null()]),
+  command: NullableStringSchema,
   args: Type.Union([Type.Array(Type.String()), Type.Null()]),
   url: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([McpHttpHeadersSchema, Type.Null()]),
@@ -26,8 +29,8 @@ export const McpServerRecordSchema = Type.Object({
 export type McpServerRecord = Static<typeof McpServerRecordSchema>;
 
 export const RegisterMcpServerInputSchema = Type.Object({
-  name: Type.String({ minLength: 1, maxLength: 120 }),
-  description: Type.Optional(Type.String({ maxLength: 1000 })),
+  name: McpServerNameFieldSchema,
+  description: Type.Optional(McpServerDescriptionFieldSchema),
   transport: McpTransportKindSchema,
   command: Type.Optional(Type.String({ maxLength: 500 })),
   args: Type.Optional(Type.Array(Type.String({ maxLength: 500 }))),
@@ -79,7 +82,7 @@ export type McpToolInput = Static<typeof McpToolInputSchema>;
 /** Tool exposed by an upstream MCP server, surfaced to the UI. */
 export const McpToolSummarySchema = Type.Object({
   name: Type.String(),
-  description: Type.Union([Type.String(), Type.Null()]),
+  description: NullableStringSchema,
   inputSchema: Type.Union([McpToolInputSchema, Type.Null()]),
 });
 export type McpToolSummary = Static<typeof McpToolSummarySchema>;
@@ -93,6 +96,6 @@ export type McpServerToolsResponse = Static<typeof McpServerToolsResponseSchema>
 
 export const UpdateMcpServerInputSchema = Type.Object({
   enabled: Type.Optional(Type.Boolean()),
-  description: Type.Optional(Type.String({ maxLength: 1000 })),
+  description: Type.Optional(McpServerDescriptionFieldSchema),
 });
 export type UpdateMcpServerInput = Static<typeof UpdateMcpServerInputSchema>;

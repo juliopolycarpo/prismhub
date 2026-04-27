@@ -1,4 +1,4 @@
-import { listMcpServers, type PrismDatabase } from '@prismhub/db';
+import { countMcpServers, type PrismDatabase } from '@prismhub/db';
 import type { StatusService, StatusSnapshot } from './status-service.types.ts';
 
 export interface StatusServiceDeps {
@@ -15,8 +15,7 @@ export function createStatusService(deps: StatusServiceDeps): StatusService {
       let dbReady = true;
       let upstreamsCount = 0;
       try {
-        const rows = await listMcpServers(deps.db);
-        upstreamsCount = rows.length;
+        upstreamsCount = await countMcpServers(deps.db);
       } catch {
         dbReady = false;
       }

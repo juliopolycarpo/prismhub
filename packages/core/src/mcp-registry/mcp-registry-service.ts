@@ -7,6 +7,7 @@ import {
   type PrismDatabase,
   updateMcpServer,
 } from '@prismhub/db';
+import { getErrorMessage } from '@prismhub/observability';
 import { ulid } from '../ids/ulid.ts';
 import type { McpRegistryService } from './mcp-registry-service.types.ts';
 
@@ -76,7 +77,7 @@ export function createMcpRegistryService(deps: McpRegistryServiceDeps): McpRegis
         const tools = await deps.discoverTools(record);
         return { serverId: id, tools: [...tools] };
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'tool discovery failed';
+        const message = getErrorMessage(err, 'tool discovery failed');
         return { serverId: id, tools: [], error: message };
       }
     },

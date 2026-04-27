@@ -20,7 +20,7 @@ interface SessionHookResult {
 const getSessionMock = mock<() => SessionResult>(async () => ({ data: null, error: null }));
 const useSessionMock = mock<() => SessionHookResult>(() => ({ data: null, isPending: false }));
 
-await mock.module('../../lib/auth-client.ts', () => ({
+await mock.module('../../lib/auth/auth-client.ts', () => ({
   authClient: {
     getSession: getSessionMock,
     signOut: async () => undefined,
@@ -29,7 +29,7 @@ await mock.module('../../lib/auth-client.ts', () => ({
 }));
 
 const { createAppRouter } = await import('../../router.tsx');
-const { AuthProvider } = await import('../../lib/auth-context.tsx');
+const { AuthProvider } = await import('../../lib/auth/auth-context.tsx');
 const { render } = await import('@testing-library/react');
 
 const mswServer = setupServer(...handlers);
