@@ -1,5 +1,15 @@
 import { countMcpServers, type PrismDatabase } from '@prismhub/db';
-import type { StatusService, StatusSnapshot } from './status-service.types.ts';
+
+export interface StatusSnapshot {
+  readonly version: string;
+  readonly uptimeSec: number;
+  readonly dbReady: boolean;
+  readonly upstreamsCount: number;
+}
+
+export interface StatusService {
+  readonly snapshot: () => Promise<StatusSnapshot>;
+}
 
 export interface StatusServiceDeps {
   readonly db: PrismDatabase;

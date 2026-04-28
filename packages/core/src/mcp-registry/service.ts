@@ -1,4 +1,10 @@
-import type { McpServerRecord, McpToolSummary } from '@prismhub/contracts';
+import type {
+  McpServerRecord,
+  McpServerToolsResponse,
+  McpToolSummary,
+  RegisterMcpServerInput,
+  UpdateMcpServerInput,
+} from '@prismhub/contracts';
 import {
   getMcpServerByIdOrThrow,
   insertMcpServer,
@@ -9,13 +15,24 @@ import {
 } from '@prismhub/db';
 import { getErrorMessage } from '@prismhub/observability';
 import { ulid } from '../ids/ulid.ts';
-import type { McpRegistryService } from './mcp-registry-service.types.ts';
 
 /**
  * Strategy for talking to a registered upstream and listing its tools.
  * Injected so the core package stays free of the @prismhub/mcp-client dependency.
  */
 export type DiscoverServerTools = (server: McpServerRecord) => Promise<readonly McpToolSummary[]>;
+
+export interface McpRegistryService {
+  readonly list: () => Promise<readonly McpServerRecord[]>;
+  readonly register: (input: RegisterMcpServerInput) => Promise<McpServerRecord>;
+  readonly update: (id: string, input: UpdateMcpServerInput) => Promise<McpServerRecord>;
+  /**
+   * Connects to the upstream and returns the tools it currently advertises.
+   * Returns `tools: []` plus a non-fatal `error` string when the upstream is
+   * unreachable so the UI can render a clear status without breaking the page.
+   */
+  readonly listTools: (id: string) => Promise<McpServerToolsResponse>;
+}
 
 export interface McpRegistryServiceDeps {
   readonly db: PrismDatabase;

@@ -12,7 +12,12 @@ import {
 } from '@prismhub/db';
 import type { EventBus } from '../events/bus.types.ts';
 import { ulid } from '../ids/ulid.ts';
-import type { SessionService } from './session-service.types.ts';
+
+export interface SessionService {
+  readonly ingestStart: (payload: SessionStartPayload) => Promise<void>;
+  readonly ingestEvent: (payload: SessionEventPayload) => Promise<void>;
+  readonly ingestEnd: (payload: SessionEndPayload) => Promise<void>;
+}
 
 export interface SessionServiceDeps {
   readonly db: PrismDatabase;
