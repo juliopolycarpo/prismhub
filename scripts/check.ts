@@ -12,14 +12,14 @@
  */
 import { resolve } from 'node:path';
 
-import { parseArgv } from './_lib/argv';
+import { parseArgv } from './_lib/cli/argv';
 import {
   renderChecklist,
   renderFailures,
   renderFooter,
   renderFullOutput,
   renderGitHubGroup,
-} from './_lib/format';
+} from './_lib/cli/format';
 import { runGate, type GateResult } from './_lib/process/gate';
 import { ALL_GATES } from './_lib/process/gates';
 

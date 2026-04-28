@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { parseArgv } from './_lib/argv';
+import { parseArgv } from './_lib/cli/argv';
 import { runTurboTask, withoutFlags } from './_lib/process/spawn';
 
 if (import.meta.main) {
