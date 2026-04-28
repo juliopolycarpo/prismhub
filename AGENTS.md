@@ -43,6 +43,9 @@
 ## Testing
 
 - Test file names must use layer suffixes: `*.unit.test.ts`, `*.integration.test.ts`, `*.e2e.test.ts`.
+- Unit tests live next to the file they cover (`foo.ts` + `foo.unit.test.ts`).
+- Integration tests live in the nearest `__tests__/` folder.
+- E2E tests use the existing app/package-level e2e placement.
 - Whole repo: `bun run test`, `bun run test:unit`, `bun run test:integration`, `bun run test:e2e`.
 - Single file: `bun test path/to/file.test.ts`.
 - Single package: run `bun test` or `bun run test:<layer>` inside that workspace directory.

@@ -30,15 +30,7 @@ All test runners are Bun-native (`bun test`). No `jest`, `vitest`, or `node --te
 | **Integration** | `*.integration.test.ts` | Crosses one boundary: DB, HTTP, filesystem, MCP transport | Yes (real SQLite, Elysia, fixtures) |
 | **E2E**         | `*.e2e.test.ts`         | Full process lifecycle (CLI smoke, runtime boot)          | Yes (subprocess + HTTP)             |
 
-Place every test alongside the code it covers:
-
-```
-packages/<pkg>/src/<feature>.ts
-packages/<pkg>/src/<feature>.unit.test.ts
-packages/<pkg>/src/<feature>.integration.test.ts
-```
-
-Cross-cutting tests that don't belong to any single package live in
+Test placement follows the canonical rule in [AGENTS.md > Testing](../AGENTS.md#testing). Cross-cutting tests that don't belong to any single package live in
 [packages/integration-tests/](../../packages/integration-tests/) — for example
 the [Bun-first policy guard](../../packages/integration-tests/src/no-legacy-node-apis.integration.test.ts).
 
