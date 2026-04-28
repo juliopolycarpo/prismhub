@@ -5,7 +5,7 @@ import {
   parseCoverageOutput,
   parsePackageSrcCoverage,
   type CoverageRunResult,
-} from './check-coverage';
+} from './coverage';
 
 function makeRun(partial: Partial<CoverageRunResult>): CoverageRunResult {
   return {
@@ -51,7 +51,6 @@ describe('parsePackageSrcCoverage()', () => {
   ].join('\n');
 
   test('averages only src/ files', () => {
-    // Only src/pool.ts (68%) and src/index.ts (100%) → avg = 84
     expect(parsePackageSrcCoverage(SAMPLE)).toBeCloseTo(84, 0);
   });
 

@@ -12,7 +12,7 @@
  *  3. `--pass-with-no-tests` is only allowed for explicitly allowlisted
  *     data-only packages.
  *
- * Usage: bun scripts/check-test-policy.ts
+ * Usage: bun scripts/checks/test-policy.ts
  */
 import { Glob } from 'bun';
 
@@ -71,14 +71,8 @@ export function hasAnyTestScript(scripts: Record<string, string>): boolean {
   );
 }
 
-/**
- * Resolves the workspaces field to concrete `package.json` paths. Each
- * workspace pattern is treated as a directory glob; we look for a
- * `package.json` directly inside each match. Tests can pass an explicit
- * `rootDir` to scope discovery.
- */
 export async function discoverWorkspacePackageJsonPaths(
-  rootDir = `${import.meta.dir}/..`,
+  rootDir = `${import.meta.dir}/../..`,
 ): Promise<string[]> {
   const root = await readJson<RootPackageJson>(`${rootDir}/package.json`);
   const patterns = root?.workspaces ?? [];
@@ -119,11 +113,6 @@ export function evaluateTestPolicy(
     const scripts = entry.pkg?.scripts ?? {};
 
     if (allowlist.has(name)) {
-      if (!hasPassWithNoTests(scripts) && !hasAnyTestScript(scripts)) {
-        allowlisted.push(name);
-        continue;
-      }
-      // Allowlisted package: --pass-with-no-tests OK; real tests also OK.
       allowlisted.push(name);
       continue;
     }
@@ -163,7 +152,7 @@ export function evaluateTestPolicy(
 }
 
 export async function buildWorkspaceEntries(
-  rootDir = `${import.meta.dir}/..`,
+  rootDir = `${import.meta.dir}/../..`,
 ): Promise<WorkspaceEntry[]> {
   const paths = await discoverWorkspacePackageJsonPaths(rootDir);
   return Promise.all(

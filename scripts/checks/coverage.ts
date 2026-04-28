@@ -7,18 +7,14 @@
  *  - A missing or malformed summary for any configured layer fails the run.
  *  - There is no `skipIfNoSummary`: every configured layer must produce a summary.
  *
- * Usage: bun scripts/check-coverage.ts
+ * Usage: bun scripts/checks/coverage.ts
  */
 import { $ } from 'bun';
 
-import { GLOBAL_THRESHOLD, LAYER_THRESHOLDS, type LayerConfig } from './_lib/coverage-config';
+import { GLOBAL_THRESHOLD, LAYER_THRESHOLDS, type LayerConfig } from '../_lib/coverage-config';
 
 export { GLOBAL_THRESHOLD, LAYER_THRESHOLDS, type LayerConfig };
 
-/**
- * Result of a single coverage subprocess invocation. Carries enough context
- * to fail closed without needing to re-run anything.
- */
 export interface CoverageRunResult {
   readonly label: string;
   readonly exitCode: number;
@@ -27,7 +23,6 @@ export interface CoverageRunResult {
 }
 
 export function parseCoverageOutput(output: string): number | null {
-  // Bun coverage format: File | % Funcs | % Lines | Uncovered Line #s
   const match = output.match(/All files\s*\|\s*[\d.]+\s*\|\s*([\d.]+)\s*\|/);
   if (!match) return null;
   const lines = parseFloat(match[1] ?? '0');
@@ -53,9 +48,6 @@ export function parsePackageSrcCoverage(output: string): number | null {
   return coverages.reduce((sum, v) => sum + v, 0) / coverages.length;
 }
 
-/**
- * Decides whether a coverage run should fail. Pure: easy to unit-test.
- */
 export interface CoverageDecision {
   readonly ok: boolean;
   readonly reason?: string;

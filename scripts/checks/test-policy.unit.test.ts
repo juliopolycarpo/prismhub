@@ -11,7 +11,7 @@ import {
   hasAnyTestScript,
   hasPassWithNoTests,
   type WorkspaceEntry,
-} from './check-test-policy.ts';
+} from './test-policy.ts';
 
 function createTempRoot(): string {
   return mkdtempSync(join(tmpdir(), 'prismhub-policy-'));
