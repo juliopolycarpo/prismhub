@@ -2,7 +2,7 @@
 import { rename, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import { REPO_ROOT } from '../_lib/spawn';
+import { REPO_ROOT } from '../_lib/process/spawn';
 const WEB_DIST_RELATIVE_PATH = 'apps/web/dist';
 const WEB_ASSETS_RELATIVE_PATH = 'packages/web-assets';
 const FAIL_FAST_ERROR_NAME = 'DashboardNotBuiltError';

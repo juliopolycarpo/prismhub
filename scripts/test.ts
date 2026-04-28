@@ -13,10 +13,10 @@
  */
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { parseArgv } from './_lib/argv';
-import { getRunId } from './_lib/run-id';
-import { inheritSpawn, turboRunCommand } from './_lib/spawn';
-import { teeSpawn, REPO_ROOT } from './_lib/tee-spawn';
+import { parseArgv } from './_lib/cli/argv';
+import { getRunId } from './_lib/cli/run-id';
+import { inheritSpawn, turboRunCommand } from './_lib/process/spawn';
+import { teeSpawn, REPO_ROOT } from './_lib/process/tee-spawn';
 import { listRootScriptUnitTests } from './_lib/test-files';
 
 type Mode = 'all' | 'unit' | 'integration' | 'e2e';

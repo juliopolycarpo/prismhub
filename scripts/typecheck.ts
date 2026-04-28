@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-import { inheritSpawn, runTurboTask } from './_lib/spawn';
-import { rootScriptsTypecheckCommand } from './_lib/typecheck-command';
+import { inheritSpawn, runTurboTask } from './_lib/process/spawn';
+import { rootScriptsTypecheckCommand } from './_lib/commands/typecheck-command';
 
 async function main(): Promise<number> {
   const passthrough = process.argv.slice(2);

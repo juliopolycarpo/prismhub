@@ -5,7 +5,7 @@
  * attempts both steps — running prettier after eslint catches any layout
  * shifts eslint might have introduced.
  */
-import { bunxCommand, inheritSpawn, runTurboTask } from './_lib/spawn';
+import { bunxCommand, inheritSpawn, runTurboTask } from './_lib/process/spawn';
 
 async function main(): Promise<number> {
   const passthrough = process.argv.slice(2);
