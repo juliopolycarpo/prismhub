@@ -29,7 +29,7 @@ describe('McpRegistryService.register()', () => {
     expect(record.name).toBe('my-server');
     expect(record.transport).toBe('stdio');
     expect(record.enabled).toBe(true);
-    expect(record.id).toHaveLength(26);
+    expect(record.id).toHaveLength(26); // ulid length
   });
 
   test('persists HTTP headers when transport is http', async () => {

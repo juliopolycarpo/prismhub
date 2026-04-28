@@ -17,11 +17,18 @@ function toThemeMode(raw: string): ThemeMode {
   return VALID_THEME_MODES.has(raw as ThemeMode) ? (raw as ThemeMode) : 'system';
 }
 
+const VALID_DENSITIES = new Set(['compact', 'comfortable'] as const);
+type Density = 'compact' | 'comfortable';
+
+function toDensity(raw: string): Density {
+  return VALID_DENSITIES.has(raw as Density) ? (raw as Density) : 'comfortable';
+}
+
 function rowToRecord(row: SettingsRow): SettingsRecord {
   return {
     themeMode: toThemeMode(row.themeMode),
     accentColor: row.accentColor,
-    density: row.density === 'compact' ? 'compact' : 'comfortable',
+    density: toDensity(row.density),
     showMetadata: row.showMetadata,
     allowUserRegistration: row.allowUserRegistration,
   };
