@@ -67,7 +67,7 @@ Every workspace declared under root `workspaces` is scanned. Behavioral packages
 
 Only explicitly allowlisted data-only packages may use `--pass-with-no-tests`.
 Today the allowlist is `@prismhub/contracts` (pure schemas). Each entry MUST
-carry a documented reason in `scripts/check-test-policy.ts`.
+carry a documented reason in `scripts/checks/test-policy.ts`.
 
 Every committed test file must use one of the layer suffixes: `*.unit.test.ts(x)`,
 `*.integration.test.ts(x)`, or `*.e2e.test.ts`.

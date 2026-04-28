@@ -116,20 +116,20 @@
 
 ## scripts
 
-| File                                                                                            | Type | Subject                                            |
-| ----------------------------------------------------------------------------------------------- | ---- | -------------------------------------------------- |
-| [scripts/\_lib/argv.unit.test.ts](../../scripts/_lib/argv.unit.test.ts)                         | unit | CLI argv parsing helper                            |
-| [scripts/\_lib/format.unit.test.ts](../../scripts/_lib/format.unit.test.ts)                     | unit | Check runner checklist and failure rendering       |
-| [scripts/\_lib/gate.unit.test.ts](../../scripts/_lib/gate.unit.test.ts)                         | unit | Gate pass/fail, crash, and timeout handling        |
-| [scripts/\_lib/parsers/bunTest.unit.test.ts](../../scripts/_lib/parsers/bunTest.unit.test.ts)   | unit | Bun test summary parser                            |
-| [scripts/\_lib/parsers/eslint.unit.test.ts](../../scripts/_lib/parsers/eslint.unit.test.ts)     | unit | ESLint JSON summary parser                         |
-| [scripts/\_lib/parsers/prettier.unit.test.ts](../../scripts/_lib/parsers/prettier.unit.test.ts) | unit | Prettier check parser                              |
-| [scripts/\_lib/parsers/tsc.unit.test.ts](../../scripts/_lib/parsers/tsc.unit.test.ts)           | unit | TypeScript compiler output parser                  |
-| [scripts/\_lib/test-files.unit.test.ts](../../scripts/_lib/test-files.unit.test.ts)             | unit | Root scripts unit-test discovery via Bun.Glob      |
-| [scripts/check-coverage.unit.test.ts](../../scripts/check-coverage.unit.test.ts)                | unit | Coverage summary and per-source parsing            |
-| [scripts/check-test-policy.unit.test.ts](../../scripts/check-test-policy.unit.test.ts)          | unit | `--pass-with-no-tests` policy discovery/evaluation |
-| [scripts/clean.unit.test.ts](../../scripts/clean.unit.test.ts)                                  | unit | `clean.ts` artifact selection logic                |
-| [scripts/tsconfig.unit.test.ts](../../scripts/tsconfig.unit.test.ts)                            | unit | Root scripts tsconfig invariants                   |
+| File                                                                                                        | Type | Subject                                            |
+| ----------------------------------------------------------------------------------------------------------- | ---- | -------------------------------------------------- |
+| [scripts/\_lib/argv.unit.test.ts](../../scripts/_lib/argv.unit.test.ts)                                     | unit | CLI argv parsing helper                            |
+| [scripts/\_lib/format.unit.test.ts](../../scripts/_lib/format.unit.test.ts)                                 | unit | Check runner checklist and failure rendering       |
+| [scripts/\_lib/gate.unit.test.ts](../../scripts/_lib/gate.unit.test.ts)                                     | unit | Gate pass/fail, crash, and timeout handling        |
+| [scripts/\_lib/parsers/bunTest.unit.test.ts](../../scripts/_lib/parsers/bunTest.unit.test.ts)               | unit | Bun test summary parser                            |
+| [scripts/\_lib/parsers/eslint.unit.test.ts](../../scripts/_lib/parsers/eslint.unit.test.ts)                 | unit | ESLint JSON summary parser                         |
+| [scripts/\_lib/parsers/prettier.unit.test.ts](../../scripts/_lib/parsers/prettier.unit.test.ts)             | unit | Prettier check parser                              |
+| [scripts/\_lib/parsers/tsc.unit.test.ts](../../scripts/_lib/parsers/tsc.unit.test.ts)                       | unit | TypeScript compiler output parser                  |
+| [scripts/\_lib/test-files.unit.test.ts](../../scripts/_lib/test-files.unit.test.ts)                         | unit | Root scripts unit-test discovery via Bun.Glob      |
+| [scripts/checks/coverage.unit.test.ts](../../scripts/checks/coverage.unit.test.ts)                          | unit | Coverage summary and per-source parsing            |
+| [scripts/checks/test-policy.unit.test.ts](../../scripts/checks/test-policy.unit.test.ts)                    | unit | `--pass-with-no-tests` policy discovery/evaluation |
+| [scripts/clean.unit.test.ts](../../scripts/clean.unit.test.ts)                                              | unit | `clean.ts` artifact selection logic                |
+| [scripts/\_lib/config-checks/tsconfig.unit.test.ts](../../scripts/_lib/config-checks/tsconfig.unit.test.ts) | unit | Root scripts tsconfig invariants                   |
 
 ---
 
