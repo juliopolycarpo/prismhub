@@ -1,8 +1,28 @@
 #!/usr/bin/env bun
+/**
+ * Workspace test policy.
+ *
+ * Discovery: from root `package.json` `workspaces` field. No hardcoded globs.
+ *
+ * Rules:
+ *  1. Every behavioral workspace must expose at least one of: `test`, `test:unit`,
+ *     `test:integration`, `test:e2e`.
+ *  2. Every behavioral workspace must contain at least one matching test file
+ *     (`*.unit.test.*`, `*.integration.test.*`, or `*.e2e.test.*`).
+ *  3. `--pass-with-no-tests` is only allowed for explicitly allowlisted
+ *     data-only packages.
+ *
+ * Usage: bun scripts/checks/test-policy.ts
+ */
 import { Glob } from 'bun';
 
+/**
+ * Data-only allowlist. These packages export schemas/types or static config
+ * with no runnable behavior, so they are exempt from the test requirement.
+ * Each entry MUST carry a documented reason.
+ */
 export const DATA_ONLY_ALLOWLIST: ReadonlyMap<string, string> = new Map([
-  ['@prismhub/contracts', 'Pure TypeBox schemas \u2014 no runtime behavior to test.'],
+  ['@prismhub/contracts', 'Pure TypeBox schemas — no runtime behavior to test.'],
 ]);
 
 export interface PackageJson {
@@ -68,6 +88,10 @@ export async function discoverWorkspacePackageJsonPaths(
   return [...matches].sort();
 }
 
+/**
+ * Returns 1 as soon as any test file is found, 0 otherwise. We only need
+ * "any" for the policy decision; a precise count would force a full glob.
+ */
 export async function countTestFiles(packageDir: string): Promise<number> {
   const glob = new Glob(TEST_FILE_GLOB);
   for await (const _ of glob.scan({ cwd: packageDir, onlyFiles: true })) {
@@ -89,10 +113,6 @@ export function evaluateTestPolicy(
     const scripts = entry.pkg?.scripts ?? {};
 
     if (allowlist.has(name)) {
-      if (!hasPassWithNoTests(scripts) && !hasAnyTestScript(scripts)) {
-        allowlisted.push(name);
-        continue;
-      }
       allowlisted.push(name);
       continue;
     }

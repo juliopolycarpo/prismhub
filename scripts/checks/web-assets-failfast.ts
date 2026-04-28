@@ -2,7 +2,7 @@
 import { rename, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const REPO_ROOT = resolve(import.meta.dir, '../..');
+import { REPO_ROOT } from '../_lib/spawn';
 const WEB_DIST_RELATIVE_PATH = 'apps/web/dist';
 const WEB_ASSETS_RELATIVE_PATH = 'packages/web-assets';
 const FAIL_FAST_ERROR_NAME = 'DashboardNotBuiltError';
@@ -93,7 +93,9 @@ export async function runWebAssetsFailFastCheck(
   try {
     await rename(plan.distPath, plan.parkedDistPath);
     movedDist = true;
-  } catch {}
+  } catch {
+    // dist doesn't exist — nothing to park
+  }
 
   try {
     return await buildRunner(plan);
