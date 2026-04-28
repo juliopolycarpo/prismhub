@@ -1,2 +1,1 @@
-export type * from './mcp-registry-service.types.ts';
-export * from './mcp-registry-service.ts';
+export * from './service.ts';

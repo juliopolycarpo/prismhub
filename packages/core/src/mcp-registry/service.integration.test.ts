@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
-import { createMcpRegistryService } from './mcp-registry-service.ts';
+import { createMcpRegistryService } from './service.ts';
 import { createCoreTestServices, type CoreTestServices } from '../testing/test-services.ts';
 
 let services: CoreTestServices;
@@ -29,7 +29,7 @@ describe('McpRegistryService.register()', () => {
     expect(record.name).toBe('my-server');
     expect(record.transport).toBe('stdio');
     expect(record.enabled).toBe(true);
-    expect(record.id).toHaveLength(26); // ulid
+    expect(record.id).toHaveLength(26);
   });
 
   test('persists HTTP headers when transport is http', async () => {
