@@ -1,6 +1,10 @@
-import type { SettingsRecord } from '@prismhub/contracts';
+import type { SettingsRecord, UpdateSettingsInput } from '@prismhub/contracts';
 import { type PrismDatabase, readSettings, type SettingsRow, updateSettings } from '@prismhub/db';
-import type { SettingsService } from './settings-service.types.ts';
+
+export interface SettingsService {
+  readonly read: () => Promise<SettingsRecord>;
+  readonly update: (patch: UpdateSettingsInput) => Promise<SettingsRecord>;
+}
 
 export interface SettingsServiceDeps {
   readonly db: PrismDatabase;
