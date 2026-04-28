@@ -1,5 +1,5 @@
 import { runtimeCommand, type RuntimeSubcommand } from './runtime-command';
-import { inheritSpawn } from './spawn';
+import { inheritSpawn } from './process/spawn';
 
 /**
  * Runs an `apps/runtime` subcommand with inherited stdio and returns its exit code.

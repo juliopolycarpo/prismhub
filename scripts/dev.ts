@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { runTurboTask } from './_lib/spawn';
+import { runTurboTask } from './_lib/process/spawn';
 
 if (import.meta.main) {
   const code = await runTurboTask('dev', process.argv.slice(2), ['--parallel']);

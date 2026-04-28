@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { parseArgv } from './_lib/argv';
-import { bunxCommand, inheritSpawn, withoutFlags } from './_lib/spawn';
+import { bunxCommand, inheritSpawn, withoutFlags } from './_lib/process/spawn';
 
 if (import.meta.main) {
   const argv = process.argv.slice(2);

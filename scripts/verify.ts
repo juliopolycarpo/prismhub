@@ -12,7 +12,7 @@
  *
  * Usage: bun scripts/verify.ts
  */
-import { inheritSpawn } from './_lib/spawn';
+import { inheritSpawn } from './_lib/process/spawn';
 
 export interface VerifyCommand {
   readonly name: string;

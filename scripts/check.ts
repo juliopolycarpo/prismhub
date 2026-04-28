@@ -20,8 +20,8 @@ import {
   renderFullOutput,
   renderGitHubGroup,
 } from './_lib/format';
-import { runGate, type GateResult } from './_lib/gate';
-import { ALL_GATES } from './_lib/gates';
+import { runGate, type GateResult } from './_lib/process/gate';
+import { ALL_GATES } from './_lib/process/gates';
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
 const DEFAULT_TIMEOUT_MS = 5 * 60 * 1000;

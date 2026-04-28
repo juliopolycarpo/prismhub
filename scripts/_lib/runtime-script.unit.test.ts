@@ -7,7 +7,7 @@ describe('runRuntimeScript()', () => {
       receivedCommand = command;
       return 0;
     });
-    await mock.module('./spawn', () => ({ inheritSpawn: inheritSpawnMock }));
+    await mock.module('./process/spawn', () => ({ inheritSpawn: inheritSpawnMock }));
 
     const { runRuntimeScript } = await import('./runtime-script');
 
@@ -28,7 +28,7 @@ describe('runRuntimeScript()', () => {
       receivedCommand = command;
       return 7;
     });
-    await mock.module('./spawn', () => ({ inheritSpawn: inheritSpawnMock }));
+    await mock.module('./process/spawn', () => ({ inheritSpawn: inheritSpawnMock }));
 
     const { runRuntimeScript } = await import('./runtime-script');
 
