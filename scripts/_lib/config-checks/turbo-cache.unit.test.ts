@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-const REPO_ROOT = `${import.meta.dir}/../..`;
+const REPO_ROOT = `${import.meta.dir}/../../..`;
 const TURBO_CONFIG_PATH = `${REPO_ROOT}/turbo.json`;
 const SETUP_BUN_ACTION_PATH = `${REPO_ROOT}/.github/actions/setup-bun/action.yml`;
 const WEB_ASSETS_PACKAGE_PATH = `${REPO_ROOT}/packages/web-assets/package.json`;
