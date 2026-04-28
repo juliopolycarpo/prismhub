@@ -10,7 +10,7 @@ import {
 } from '@prismhub/db';
 import { createEventBus } from '../events/bus.ts';
 import type { FeedEnvelope } from '../events/bus.types.ts';
-import { createSessionService } from './session-service.ts';
+import { createSessionService } from './service.ts';
 
 let handle: TempDatabaseHandle;
 let db: PrismDatabase;
