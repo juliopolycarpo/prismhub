@@ -1,6 +1,6 @@
 /**
  * Per-layer line-coverage thresholds. Tighter for stable, pure-logic layers.
- * Pulled out of `check-coverage.ts` so the table can be unit-tested in isolation
+ * Pulled out of `checks/coverage.ts` so the table can be unit-tested in isolation
  * and reused by other tooling without dragging in the bun:$ shell.
  */
 

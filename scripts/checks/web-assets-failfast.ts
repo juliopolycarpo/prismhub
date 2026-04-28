@@ -2,7 +2,7 @@
 import { rename, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const REPO_ROOT = resolve(import.meta.dir, '..');
+const REPO_ROOT = resolve(import.meta.dir, '../..');
 const WEB_DIST_RELATIVE_PATH = 'apps/web/dist';
 const WEB_ASSETS_RELATIVE_PATH = 'packages/web-assets';
 const FAIL_FAST_ERROR_NAME = 'DashboardNotBuiltError';
@@ -26,12 +26,6 @@ export interface FailFastDecision {
 
 type BuildRunner = (plan: WebAssetsFailFastPlan) => Promise<CommandResult>;
 
-/**
- * Builds the plan for the web-assets fail-fast check.
- *
- * Example:
- *   const plan = createWebAssetsFailFastPlan('/repo', 'test');
- */
 export function createWebAssetsFailFastPlan(
   rootDir: string,
   nonce = `${Date.now()}-${process.pid}`,
@@ -46,12 +40,6 @@ export function createWebAssetsFailFastPlan(
   };
 }
 
-/**
- * Decides whether the package-level build failed in the expected way.
- *
- * Example:
- *   decideWebAssetsFailFast({ exitCode: 1, output: 'DashboardNotBuiltError' }).ok;
- */
 export function decideWebAssetsFailFast(result: CommandResult): FailFastDecision {
   if (result.exitCode === 0) {
     return {
@@ -96,12 +84,6 @@ async function cleanupDist(plan: WebAssetsFailFastPlan, movedDist: boolean): Pro
   }
 }
 
-/**
- * Runs the fail-fast check while restoring the dashboard dist afterwards.
- *
- * Example:
- *   const result = await runWebAssetsFailFastCheck(createWebAssetsFailFastPlan('/repo'));
- */
 export async function runWebAssetsFailFastCheck(
   plan: WebAssetsFailFastPlan,
   buildRunner: BuildRunner = ({ command, workdir }) => spawnCaptured(command, workdir),
@@ -111,9 +93,7 @@ export async function runWebAssetsFailFastCheck(
   try {
     await rename(plan.distPath, plan.parkedDistPath);
     movedDist = true;
-  } catch {
-    // dist doesn't exist — nothing to park
-  }
+  } catch {}
 
   try {
     return await buildRunner(plan);

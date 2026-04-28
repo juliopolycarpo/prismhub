@@ -1,28 +1,8 @@
 #!/usr/bin/env bun
-/**
- * Workspace test policy.
- *
- * Discovery: from root `package.json` `workspaces` field. No hardcoded globs.
- *
- * Rules:
- *  1. Every behavioral workspace must expose at least one of: `test`, `test:unit`,
- *     `test:integration`, `test:e2e`.
- *  2. Every behavioral workspace must contain at least one matching test file
- *     (`*.unit.test.*`, `*.integration.test.*`, or `*.e2e.test.*`).
- *  3. `--pass-with-no-tests` is only allowed for explicitly allowlisted
- *     data-only packages.
- *
- * Usage: bun scripts/check-test-policy.ts
- */
 import { Glob } from 'bun';
 
-/**
- * Data-only allowlist. These packages export schemas/types or static config
- * with no runnable behavior, so they are exempt from the test requirement.
- * Each entry MUST carry a documented reason.
- */
 export const DATA_ONLY_ALLOWLIST: ReadonlyMap<string, string> = new Map([
-  ['@prismhub/contracts', 'Pure TypeBox schemas — no runtime behavior to test.'],
+  ['@prismhub/contracts', 'Pure TypeBox schemas \u2014 no runtime behavior to test.'],
 ]);
 
 export interface PackageJson {
@@ -71,14 +51,8 @@ export function hasAnyTestScript(scripts: Record<string, string>): boolean {
   );
 }
 
-/**
- * Resolves the workspaces field to concrete `package.json` paths. Each
- * workspace pattern is treated as a directory glob; we look for a
- * `package.json` directly inside each match. Tests can pass an explicit
- * `rootDir` to scope discovery.
- */
 export async function discoverWorkspacePackageJsonPaths(
-  rootDir = `${import.meta.dir}/..`,
+  rootDir = `${import.meta.dir}/../..`,
 ): Promise<string[]> {
   const root = await readJson<RootPackageJson>(`${rootDir}/package.json`);
   const patterns = root?.workspaces ?? [];
@@ -94,10 +68,6 @@ export async function discoverWorkspacePackageJsonPaths(
   return [...matches].sort();
 }
 
-/**
- * Returns 1 as soon as any test file is found, 0 otherwise. We only need
- * "any" for the policy decision; a precise count would force a full glob.
- */
 export async function countTestFiles(packageDir: string): Promise<number> {
   const glob = new Glob(TEST_FILE_GLOB);
   for await (const _ of glob.scan({ cwd: packageDir, onlyFiles: true })) {
@@ -123,7 +93,6 @@ export function evaluateTestPolicy(
         allowlisted.push(name);
         continue;
       }
-      // Allowlisted package: --pass-with-no-tests OK; real tests also OK.
       allowlisted.push(name);
       continue;
     }
@@ -163,7 +132,7 @@ export function evaluateTestPolicy(
 }
 
 export async function buildWorkspaceEntries(
-  rootDir = `${import.meta.dir}/..`,
+  rootDir = `${import.meta.dir}/../..`,
 ): Promise<WorkspaceEntry[]> {
   const paths = await discoverWorkspacePackageJsonPaths(rootDir);
   return Promise.all(

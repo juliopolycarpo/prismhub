@@ -197,7 +197,7 @@ export const e2eTestGate = makeTestGate({
 
 export const coverageGate: Gate = simpleExitCodeGate(
   'coverage',
-  [BUN, 'scripts/check-coverage.ts'],
+  [BUN, 'scripts/checks/coverage.ts'],
   {
     passed: 'Coverage thresholds met across all layers',
     failed: 'Coverage thresholds not met',
@@ -206,7 +206,7 @@ export const coverageGate: Gate = simpleExitCodeGate(
 
 export const policyGate: Gate = simpleExitCodeGate(
   'policy',
-  [BUN, 'scripts/check-test-policy.ts'],
+  [BUN, 'scripts/checks/test-policy.ts'],
   {
     passed: 'Test policy respected (allowlist only)',
     failed: 'Test policy violated',

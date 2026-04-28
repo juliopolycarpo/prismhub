@@ -6,7 +6,7 @@ import {
   createWebAssetsFailFastPlan,
   decideWebAssetsFailFast,
   runWebAssetsFailFastCheck,
-} from './check-web-assets-failfast.ts';
+} from './web-assets-failfast.ts';
 
 const tempDirs: string[] = [];
 

@@ -5,7 +5,7 @@ import {
   parseCoverageOutput,
   parsePackageSrcCoverage,
   type CoverageRunResult,
-} from './check-coverage';
+} from './coverage';
 
 function makeRun(partial: Partial<CoverageRunResult>): CoverageRunResult {
   return {
@@ -27,9 +27,9 @@ describe('parseCoverageOutput()', () => {
       ].join('\n'),
       expected: 82.5,
     },
-    { input: '✓ some test\nbun test v1.3.12\n', expected: null },
+    { input: '\u2713 some test\nbun test v1.3.12\n', expected: null },
     { input: '', expected: null },
-    { input: 'bun test v1.3.12\n✓ passes\n✓ more\n', expected: null },
+    { input: 'bun test v1.3.12\n\u2713 passes\n\u2713 more\n', expected: null },
     { input: 'All files | 100.00 | 100.00 | ', expected: 100 },
     { input: 'All files |   0.00 |   0.00 | ', expected: 0 },
     { input: '  All files  |  72.34  |  71.00  |', expected: 71 },
@@ -51,7 +51,6 @@ describe('parsePackageSrcCoverage()', () => {
   ].join('\n');
 
   test('averages only src/ files', () => {
-    // Only src/pool.ts (68%) and src/index.ts (100%) → avg = 84
     expect(parsePackageSrcCoverage(SAMPLE)).toBeCloseTo(84, 0);
   });
 
