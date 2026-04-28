@@ -5,6 +5,9 @@ import { join } from 'node:path';
 
 import { teeSpawn } from './tee-spawn';
 
+const CHILD_SCRIPT =
+  "console.log(`stdout:${Bun.env.PRISMHUB_TEE_VALUE}`); console.error('stderr:boom'); process.exit(3);";
+
 function createTempRoot(): string {
   return mkdtempSync(join(tmpdir(), 'prismhub-tee-spawn-'));
 }
@@ -14,15 +17,9 @@ describe('teeSpawn()', () => {
     const rootDir = createTempRoot();
     try {
       const logPath = join(rootDir, 'results', 'tee.log.txt');
-      const result = await teeSpawn(
-        [
-          process.execPath,
-          '-e',
-          "console.log(`stdout:${Bun.env.PRISMHUB_TEE_VALUE}`); console.error('stderr:boom'); process.exit(3);",
-        ],
-        logPath,
-        { PRISMHUB_TEE_VALUE: 'ok' },
-      );
+      const result = await teeSpawn([process.execPath, '-e', CHILD_SCRIPT], logPath, {
+        PRISMHUB_TEE_VALUE: 'ok',
+      });
 
       const logText = await Bun.file(logPath).text();
 
