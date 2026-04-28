@@ -1,7 +1,7 @@
 import type { McpServerRecord } from '@prismhub/contracts';
 import { Settings } from 'lucide-react';
 import { useState } from 'react';
-import { Card, Toggle } from '../ui';
+import { Card, Toggle } from '../../components/ui';
 import { McpServerSettingsModal } from './mcp-server-settings-modal.tsx';
 import { McpToolsList } from './mcp-tools-list.tsx';
 

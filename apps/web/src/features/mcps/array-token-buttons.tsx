@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '../../lib/cn.ts';
-import { Button } from '../ui';
+import { Button } from '../../components/ui';
 
 interface ApproveButtonProps {
   readonly label: string;

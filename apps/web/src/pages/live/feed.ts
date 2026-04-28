@@ -1,9 +1,9 @@
 import type { FeedEnvelope } from '@prismhub/contracts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { feedEntriesQueryOptions } from '../lib/app-queries.ts';
-import { FEED_URL } from '../lib/api.ts';
-import { queryKeys } from '../lib/query-keys.ts';
+import { feedEntriesQueryOptions } from '../../lib/app-queries.ts';
+import { FEED_URL } from '../../lib/api.ts';
+import { queryKeys } from '../../lib/query-keys.ts';
 
 export type FeedStatus = 'connecting' | 'open' | 'offline' | 'invalid-event';
 

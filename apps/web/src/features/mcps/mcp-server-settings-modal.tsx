@@ -2,8 +2,8 @@ import type { McpServerRecord, McpToolSummary } from '@prismhub/contracts';
 import { useQuery } from '@tanstack/react-query';
 import { mcpServerToolsQueryOptions } from '../../lib/app-queries.ts';
 import { getErrorMessage } from '../../lib/error.ts';
-import { AppModal } from '../app-modal.tsx';
-import { Button } from '../ui';
+import { AppModal } from '../../components/app-modal.tsx';
+import { Button } from '../../components/ui';
 import { McpToolConfigurationCard } from './mcp-tool-configuration-card.tsx';
 
 interface McpServerSettingsModalProps {

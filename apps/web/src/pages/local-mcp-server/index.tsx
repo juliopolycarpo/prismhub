@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { Server } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { SettingsRow, SettingsSection } from '../components/settings-panels.tsx';
-import { Badge } from '../components/ui';
-import { cn } from '../lib/cn.ts';
+import { SettingsRow, SettingsSection } from '../../components/settings-panels.tsx';
+import { Badge } from '../../components/ui';
+import { cn } from '../../lib/cn.ts';
 import {
   getLocalMcpEndpoint,
   routerToolsQueryOptions,
   toggleTool,
   toolId,
   type RouterTool,
-} from './local-mcp-server.data.ts';
-import { RouterToolCard } from './local-mcp-tool-card.tsx';
+} from './data.ts';
+import { RouterToolCard } from './tool-card.tsx';
 
 const CLIENT_LABELS = ['Claude Code', 'Codex', 'Cliente MCP genérico'] as const;
 const EMPTY_ROUTER_TOOLS: readonly RouterTool[] = [];

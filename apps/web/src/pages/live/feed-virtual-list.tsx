@@ -1,7 +1,7 @@
 import type { FeedEnvelope } from '@prismhub/contracts';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef } from 'react';
-import { FeedItem } from './live-feed-item.tsx';
+import { FeedItem } from './feed-item.tsx';
 
 const ESTIMATED_EVENT_HEIGHT = 120;
 const FEED_OVERSCAN = 6;

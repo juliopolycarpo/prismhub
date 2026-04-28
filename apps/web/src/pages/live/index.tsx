@@ -1,11 +1,11 @@
 import type { FeedEnvelope } from '@prismhub/contracts';
 import { useQuery } from '@tanstack/react-query';
 import { Activity, ArrowRight, Download, Pause } from 'lucide-react';
-import { Badge, Button, Card, StatCard } from '../components/ui';
-import { summaryQueryOptions, type LiveSummary } from '../lib/app-queries.ts';
-import { useFeed, type FeedStatus } from './live.feed.ts';
-import { cn } from '../lib/cn.ts';
-import { LiveFeedVirtualList } from './live-feed-virtual-list.tsx';
+import { Badge, Button, Card, StatCard } from '../../components/ui';
+import { summaryQueryOptions, type LiveSummary } from '../../lib/app-queries.ts';
+import { useFeed, type FeedStatus } from './feed.ts';
+import { cn } from '../../lib/cn.ts';
+import { LiveFeedVirtualList } from './feed-virtual-list.tsx';
 
 export function LivePage() {
   const feed = useFeed();
