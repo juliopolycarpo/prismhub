@@ -13,7 +13,7 @@ import { parseBunTestCounts } from '../parsers/bunTest';
 import { parseTscOutput } from '../parsers/tsc';
 import { parsePrettierCheck } from '../parsers/prettier';
 import { listRootScriptUnitTests } from '../test-files';
-import { rootScriptsTypecheckCommand } from '../typecheck-command';
+import { rootScriptsTypecheckCommand } from '../commands/typecheck-command';
 
 const BUN = process.execPath;
 // Resolve the turbo binary directly to skip the `bun x` resolver cold start.

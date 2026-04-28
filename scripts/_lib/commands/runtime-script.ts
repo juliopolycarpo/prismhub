@@ -1,5 +1,7 @@
 import { runtimeCommand, type RuntimeSubcommand } from './runtime-command';
-import { inheritSpawn } from './process/spawn';
+import { inheritSpawn } from '../process/spawn';
+
+type SpawnWithInheritedStdio = (command: readonly string[]) => Promise<number>;
 
 /**
  * Runs an `apps/runtime` subcommand with inherited stdio and returns its exit code.
@@ -10,6 +12,7 @@ import { inheritSpawn } from './process/spawn';
 export async function runRuntimeScript(
   subcommand: RuntimeSubcommand,
   argv: readonly string[],
+  spawn: SpawnWithInheritedStdio = inheritSpawn,
 ): Promise<number> {
-  return inheritSpawn(runtimeCommand(subcommand, argv));
+  return spawn(runtimeCommand(subcommand, argv));
 }

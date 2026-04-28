@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { runRuntimeScript } from './_lib/runtime-script';
+import { runRuntimeScript } from './_lib/commands/runtime-script';
 
 if (import.meta.main) {
   process.exit(await runRuntimeScript('serve', process.argv.slice(2)));

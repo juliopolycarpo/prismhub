@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { ROOT_SCRIPTS_TSCONFIG, rootScriptsTypecheckCommand } from '../typecheck-command';
+import { ROOT_SCRIPTS_TSCONFIG, rootScriptsTypecheckCommand } from '../commands/typecheck-command';
 
 interface TsConfigJson {
   readonly extends?: string;

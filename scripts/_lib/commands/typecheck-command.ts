@@ -1,4 +1,4 @@
-import { bunxCommand } from './process/spawn';
+import { bunxCommand } from '../process/spawn';
 
 export const ROOT_SCRIPTS_TSCONFIG = 'scripts/tsconfig.json';
 

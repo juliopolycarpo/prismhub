@@ -1,5 +1,7 @@
 import { describe, expect, mock, test } from 'bun:test';
 
+import { runRuntimeScript } from './runtime-script';
+
 describe('runRuntimeScript()', () => {
   test('delegates to inheritSpawn with the runtime subcommand and argv', async () => {
     let receivedCommand: readonly string[] | undefined;
@@ -7,11 +9,8 @@ describe('runRuntimeScript()', () => {
       receivedCommand = command;
       return 0;
     });
-    await mock.module('./process/spawn', () => ({ inheritSpawn: inheritSpawnMock }));
 
-    const { runRuntimeScript } = await import('./runtime-script');
-
-    const code = await runRuntimeScript('serve', ['--port', '9090']);
+    const code = await runRuntimeScript('serve', ['--port', '9090'], inheritSpawnMock);
 
     expect(code).toBe(0);
     expect(inheritSpawnMock).toHaveBeenCalledTimes(1);
@@ -28,11 +27,8 @@ describe('runRuntimeScript()', () => {
       receivedCommand = command;
       return 7;
     });
-    await mock.module('./process/spawn', () => ({ inheritSpawn: inheritSpawnMock }));
 
-    const { runRuntimeScript } = await import('./runtime-script');
-
-    const code = await runRuntimeScript('migrate', []);
+    const code = await runRuntimeScript('migrate', [], inheritSpawnMock);
 
     expect(code).toBe(7);
     expect(receivedCommand).toContain('migrate');
