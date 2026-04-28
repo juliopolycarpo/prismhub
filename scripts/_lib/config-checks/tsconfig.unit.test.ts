@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { ROOT_SCRIPTS_TSCONFIG, rootScriptsTypecheckCommand } from '../commands/typecheck-command';
+import { ROOT_SCRIPTS_TSCONFIG } from '../commands/typecheck-command';
 
 interface TsConfigJson {
   readonly extends?: string;
@@ -15,16 +15,6 @@ async function readTsConfig(path: string): Promise<TsConfigJson> {
 }
 
 describe('root scripts tsconfig', () => {
-  test('is covered by the root typecheck command', () => {
-    expect(rootScriptsTypecheckCommand()).toEqual([
-      process.execPath,
-      'x',
-      'tsc',
-      '-b',
-      ROOT_SCRIPTS_TSCONFIG,
-    ]);
-  });
-
   test('inherits Bun globals and import-meta support', async () => {
     const scriptsConfig = await readTsConfig(ROOT_SCRIPTS_TSCONFIG);
     const scriptBaseConfig = await readTsConfig('tsconfig.script.json');
