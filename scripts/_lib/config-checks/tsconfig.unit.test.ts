@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { ROOT_SCRIPTS_TSCONFIG, rootScriptsTypecheckCommand } from './_lib/typecheck-command';
+import { ROOT_SCRIPTS_TSCONFIG, rootScriptsTypecheckCommand } from '../typecheck-command';
 
 interface TsConfigJson {
   readonly extends?: string;
@@ -11,7 +11,7 @@ interface TsConfigJson {
 }
 
 async function readTsConfig(path: string): Promise<TsConfigJson> {
-  return (await Bun.file(`${import.meta.dir}/../${path}`).json()) as TsConfigJson;
+  return (await Bun.file(`${import.meta.dir}/../../../${path}`).json()) as TsConfigJson;
 }
 
 describe('root scripts tsconfig', () => {

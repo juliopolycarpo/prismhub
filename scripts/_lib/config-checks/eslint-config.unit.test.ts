@@ -22,7 +22,7 @@ interface EslintConfigModule {
   readonly layerConfig: readonly EslintConfigEntry[];
 }
 
-const configUrl = new URL('../eslint.config.js', import.meta.url).href;
+const configUrl = new URL('../../../eslint.config.js', import.meta.url).href;
 const { createBaseConfig, createConfig, exceptionConfig, layerConfig } = (await import(
   configUrl
 )) as unknown as EslintConfigModule;
